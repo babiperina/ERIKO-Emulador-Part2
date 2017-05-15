@@ -30,22 +30,134 @@ public class Encoder {
 
 	private void codificar() {
 		String instrucaoAtual;
+		InstrucaoCodificada codificada;
 		long[] code;
+		int cont = 1;
+		System.out.println("$$$$ Instrução sendo codificada no encoder: ");
 		while (instrucoes.size() != 0) {
+
 			instrucaoAtual = instrucoes.get(0);
 
+			if(cont == 1)
+			System.out.println("$$$$ Codificação para LONG das instruções:");
 			code = encoderInstrucaoToLong(instrucaoAtual);
+			for (int i = 0; i < code.length; i++) {
+				if (i == 0)
+					System.out.print(cont++ + " - ");
+				System.out.print(code[i] + " ");
+			}
+			System.out.println();
 
+			codificada = new InstrucaoCodificada(transformarDeLongProCodigoFinal(code, Constantes.SIZE_word));
+			instrucoesCodificadas.add(codificada);
 
 			instrucoes.remove(0);
 		}
 	}
 
+	public Object[] transformarDeLongProCodigoFinal(long code[], int palavraSize) {
+		Object[] instruction = null;
+		char type = (code[0] + "").charAt(0);
+		switch (palavraSize) {
+		case 16:
+			switch (type) {
+			case '3': // mov
+				instruction = new Short[3];
+				instruction[0] = (short) code[0];
+				instruction[1] = (short) code[1];
+				instruction[2] = (short) code[2];
+				break;
+			case '4': // add
+				instruction = new Short[3];
+				instruction[0] = (short) code[0];
+				instruction[1] = (short) code[1];
+				instruction[2] = (short) code[2];
+				break;
+			case '5': // inc
+				instruction = new Short[2];
+				instruction[0] = (short) code[0];
+				instruction[1] = (short) code[1];
+				break;
+			case '6': // imul
+				instruction = new Short[4];
+				instruction[0] = (short) code[0];
+				instruction[1] = (short) code[1];
+				instruction[2] = (short) code[2];
+				instruction[3] = (short) code[3];
+				break;
+			}
+			break;
+		case 32:
+			switch (type) {
+			case '3': // mov
+				instruction = new Integer[3];
+				instruction[0] = (int) code[0];
+				instruction[1] = (int) code[1];
+				instruction[2] = (int) code[2];
+				break;
+			case '4': // add
+				instruction = new Integer[3];
+				instruction[0] = (int) code[0];
+				instruction[1] = (int) code[1];
+				instruction[2] = (int) code[2];
+				break;
+			case '5': // inc
+				instruction = new Integer[2];
+				instruction[0] = (int) code[0];
+				instruction[1] = (int) code[1];
+				break;
+			case '6': // imul
+				instruction = new Integer[4];
+				instruction[0] = (int) code[0];
+				instruction[1] = (int) code[1];
+				instruction[2] = (int) code[2];
+				instruction[3] = (int) code[3];
+				break;
+			}
+			break;
+		case 64:
+			switch (type) {
+			case '3': // mov
+				instruction = new Long[3];
+				instruction[0] = (long) code[0];
+				instruction[1] = (long) code[1];
+				instruction[2] = (long) code[2];
+				break;
+			case '4': // add
+				instruction = new Long[3];
+				instruction[0] = (long) code[0];
+				instruction[1] = (long) code[1];
+				instruction[2] = (long) code[2];
+				break;
+			case '5': // inc
+				instruction = new Long[2];
+				instruction[0] = (long) code[0];
+				instruction[1] = (long) code[1];
+				break;
+			case '6': // imul
+				instruction = new Long[4];
+				instruction[0] = (long) code[0];
+				instruction[1] = (long) code[1];
+				instruction[2] = (long) code[2];
+				instruction[3] = (long) code[3];
+				break;
+			}
+			break;
+
+		default:
+			System.out.println("error no tamanho da palavra");
+			System.exit(0);
+			break;
+		}
+
+		return instruction;
+	}
+
 	public void mostrarInstrucoesCodificadas() {
 		if (instrucoesCodificadas.size() == 0)
-			System.out.println("$$$$ NÃ£o hÃ¡ instruÃ§Ãµes codificadas no encoder.");
+			System.out.println("$$$$ Não há instruções codificadas no encoder.");
 		else
-			System.out.println("$$$$ InstruÃ§Ãµes codificadas no encoder:");
+			System.out.println("$$$$ Instruções codificadas para LONG/INT/SHORT no encoder:");
 
 		int cont = 1;
 		for (InstrucaoCodificada instrucao : instrucoesCodificadas) {
@@ -55,9 +167,9 @@ public class Encoder {
 
 	public void mostrarInstrucoes() {
 		if (instrucoes.size() == 0)
-			System.out.println("$$$$ NÃ£o hÃ¡ instruÃ§Ãµes no encoder.");
+			System.out.println("$$$$ Não há instruções no encoder.");
 		else
-			System.out.println("$$$$ InstruÃ§Ãµes no encoder:");
+			System.out.println("$$$$ Instruções no encoder:");
 
 		int cont = 1;
 		for (String instrucao : instrucoes) {
@@ -91,20 +203,23 @@ public class Encoder {
 				} else {
 					code = encoderAddInstruction(r, m, x, y);
 				}
-				System.out.println("InstruÃ§Ã£o codificada em longs: " + code[0] + " " + code[1] + " " + code[2]);
+				// System.out.println("Codificada em longs: " + code[0] + " " +
+				// code[1] + " " + code[2]);
 			} else if (type2.matches()) {
 				String x = type2.group(2);
 
 				code = encoderIncInstruction(r, x);
-				System.out.println("InstruÃ§Ã£oo codificada em longs: " + code[0] + " " + code[1]);
+				// System.out.println("InstruÃ§Ã£oo codificada em longs: " +
+				// code[0] + " " + code[1]);
 			} else {
 				String x, y, z;
 				x = type3.group(2);
 				y = type3.group(3);
 				z = type3.group(4);
 				code = encoderImulInstruction(r, m, x, y, z);
-				System.out.println(
-						"InstruÃ§Ã£o codificada em longs: " + code[0] + " " + code[1] + " " + code[2] + " " + code[3]);
+				// System.out.println(
+				// "InstruÃ§Ã£o codificada em longs: " + code[0] + " " + code[1]
+				// + " " + code[2] + " " + code[3]);
 			}
 
 		}

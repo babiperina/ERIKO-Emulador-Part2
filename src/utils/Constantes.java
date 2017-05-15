@@ -4,7 +4,14 @@ public class Constantes {
 
 	public static final String ARQUIVO_DE_TEXTO = "assembly";
 
-	public static int SIZE_word = 16; //em bits
+	public static int id_ES = 37;
+	public static int id_CPU = 278;
+	public static int id_RAM = 726;
+
+	public static int id_SINAL_LER = 537;
+	public static int id_SINAL_ESC = 372;
+
+	public static int SIZE_word = 16; // em bits
 	public static int SIZE_ram = 8;
 	public static int SIZE_e_s_buffer;
 
