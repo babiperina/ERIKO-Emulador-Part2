@@ -19,13 +19,17 @@ public class Encoder {
 		codificar();
 		mostrarInstrucoesCodificadas();
 		// passar as instru√ß√µes pro e/s de acordo com o tamanho do buffer
-		mandarInstrucoesParaModuloES();
 
 	}
 
-	private void mandarInstrucoesParaModuloES() {
-		// TODO Auto-generated method stub
-
+	public InstrucaoCodificada mandarInstrucoesParaModuloES() {
+		for (int i = 0; i < instrucoesCodificadas.size(); i++) {
+			if (!instrucoesCodificadas.get(i).isES()) {
+				instrucoesCodificadas.get(i).setES(true);
+				return instrucoesCodificadas.get(i);
+			}
+		}
+		return null;
 	}
 
 	private void codificar() {
@@ -38,8 +42,8 @@ public class Encoder {
 
 			instrucaoAtual = instrucoes.get(0);
 
-			if(cont == 1)
-			System.out.println("$$$$ CodificaÁ„o para LONG das instruÁıes:");
+			if (cont == 1)
+				System.out.println("$$$$ CodificaÁ„o para LONG das instruÁıes:");
 			code = encoderInstrucaoToLong(instrucaoAtual);
 			for (int i = 0; i < code.length; i++) {
 				if (i == 0)
