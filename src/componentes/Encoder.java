@@ -37,13 +37,13 @@ public class Encoder {
 		InstrucaoCodificada codificada;
 		long[] code;
 		int cont = 1;
-		System.out.println("$$$$ Instrução sendo codificada no encoder: ");
+		System.out.println("$$$$ InstruÃ§Ã£o sendo codificada no encoder: ");
 		while (instrucoes.size() != 0) {
 
 			instrucaoAtual = instrucoes.get(0);
 
 			if (cont == 1)
-				System.out.println("$$$$ Codificação para LONG das instruções:");
+				System.out.println("$$$$ CodificaÃ§Ã£o para LONG das instruÃ§Ãµes:");
 			code = encoderInstrucaoToLong(instrucaoAtual);
 			for (int i = 0; i < code.length; i++) {
 				if (i == 0)
@@ -159,9 +159,9 @@ public class Encoder {
 
 	public void mostrarInstrucoesCodificadas() {
 		if (instrucoesCodificadas.size() == 0)
-			System.out.println("$$$$ Não há instruções codificadas no encoder.");
+			System.out.println("$$$$ NÃ£o hÃ¡ instruÃ§Ãµes codificadas no encoder.");
 		else
-			System.out.println("$$$$ Instruções codificadas para LONG/INT/SHORT no encoder:");
+			System.out.println("$$$$ InstruÃ§Ãµes codificadas para LONG/INT/SHORT no encoder:");
 
 		int cont = 1;
 		for (InstrucaoCodificada instrucao : instrucoesCodificadas) {
@@ -169,11 +169,12 @@ public class Encoder {
 		}
 	}
 
+
 	public void mostrarInstrucoes() {
 		if (instrucoes.size() == 0)
-			System.out.println("$$$$ Não há instruções no encoder.");
+			System.out.println("$$$$ NÃ£o hÃ¡ instruÃ§Ãµes no encoder.");
 		else
-			System.out.println("$$$$ Instruções no encoder:");
+			System.out.println("$$$$ InstruÃ§Ãµes no encoder:");
 
 		int cont = 1;
 		for (String instrucao : instrucoes) {

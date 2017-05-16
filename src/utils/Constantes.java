@@ -29,6 +29,8 @@ public class Constantes {
 	public static String limitMemoryDigits;
 
 	public static void setTamanhoMaxInstrucao() {
+		
+		
 		switch (WIDTH_barramento) {
 		case 8:
 			switch (SIZE_word) {
@@ -70,7 +72,7 @@ public class Constantes {
 			}
 			break;
 		default:
-			System.err.println("Tamanho de largura de barramento inv·lido.");
+			System.err.println("Tamanho de largura de barramento inv√°lido.");
 			break;
 		}
 
@@ -151,18 +153,18 @@ public class Constantes {
 		RE_inc = "^(inc)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*$";
 		RE_imul = "^(imul)\\s+([a-dA-D]|0x[a-fA-F0-9] " + limitMemoryDigits + ")\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]"
 				+ limitMemoryDigits + "|\\d)\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
-//		System.out.println(RE_add_mov + "\n" + RE_inc + "\n" + RE_imul);
+		System.out.println(RE_add_mov + "\n" + RE_inc + "\n" + RE_imul);
 		System.out.println(
-				"LB: " + WIDTH_barramento + " TP: " + SIZE_word + " Tamanho Max InstruÁ„o: " + TAM_MAX_INST);
+				"LB: " + WIDTH_barramento + " TP: " + SIZE_word + " TAM_MAX_INST: " + TAM_MAX_INST);
 		switch (SIZE_word) {
 		case 16:
-			System.out.println("$$$$ Palavra dever· ser SHORT.");
+			System.out.println("$$$$ Palavra dever√° ser SHORT.");
 			break;
 		case 32:
-			System.out.println("$$$$ Palavra dever· ser INT.");
+			System.out.println("$$$$ Palavra dever√° ser INT.");
 			break;
 		case 64:
-			System.out.println("$$$$ Palavra dever· ser LONG.");
+			System.out.println("$$$$ Palavra dever√° ser LONG.");
 			break;
 
 		default:

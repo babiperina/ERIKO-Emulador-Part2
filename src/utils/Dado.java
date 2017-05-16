@@ -4,9 +4,9 @@ public class Dado {
 
 	private int remetente;
 	private int destinatario;
-	private int conteudo;
+	private byte[] conteudo;
 
-	public Dado(int remetente, int destinatario, int conteudo) {
+	public Dado(int remetente, int destinatario, byte[] conteudo) {
 		super();
 		this.remetente = remetente;
 		this.destinatario = destinatario;
@@ -29,11 +29,11 @@ public class Dado {
 		this.destinatario = destinatario;
 	}
 
-	public int getConteudo() {
+	public byte[] getConteudo() {
 		return conteudo;
 	}
 
-	public void setConteudo(int conteudo) {
+	public void setConteudo(byte[] conteudo) {
 		this.conteudo = conteudo;
 	}
 
