@@ -267,6 +267,7 @@ public class Encoder {
 				if (!matcher.matches()) {
 					// mov memory, immediate
 					code[0] = Constantes.VALUE_mov_m_from_i;
+					y = y.substring(2);
 					code[2] = Long.parseLong(y);
 				} else {
 					// mov memory, memory

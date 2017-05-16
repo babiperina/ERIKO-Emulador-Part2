@@ -14,6 +14,7 @@ public class Constantes {
 	public static int SIZE_word = 16; // em bits
 	public static int SIZE_ram = 8;
 	public static int SIZE_e_s_buffer;
+	public static double tamanho_MAX_INSTRUCAO = 1;
 
 	private static void setSizeBuffer() {
 		if (SIZE_ram == 8)
@@ -24,14 +25,18 @@ public class Constantes {
 			SIZE_e_s_buffer = 16;
 	}
 
-	public static int WIDTH_barramento = 8;
+	public static int WIDTH_barramento = 8; // bits
 	public static String limitMemoryDigits;
 
+	public static void setTamanhoMaxInstrucao() {
+		tamanho_MAX_INSTRUCAO += WIDTH_barramento / SIZE_word * 3;
+	}
+
 	private static void setDigitsLimitMemory() {
-		if (WIDTH_barramento == 8 || WIDTH_barramento == 16) {
+		if (WIDTH_barramento / 4 == 1) {
 			limitMemoryDigits = "{1}";
-		} else if (WIDTH_barramento == 32) {
-			limitMemoryDigits = "{1,2}";
+		} else {
+			limitMemoryDigits = "{1," + (WIDTH_barramento / 4) + "}";
 		}
 	}
 
@@ -96,11 +101,31 @@ public class Constantes {
 	static {
 		setDigitsLimitMemory();
 		setSizeBuffer();
+		setTamanhoMaxInstrucao();
 		RE_add_mov = "^(add|mov)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*,"
-				+ "\\s+([a-dA-D]|0x[a-fA-F0-9]+|\\d+)\\s*$";
+				+ "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
 		RE_inc = "^(inc)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*$";
 		RE_imul = "^(imul)\\s+([a-dA-D]|0x[a-fA-F0-9] " + limitMemoryDigits + ")\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]"
 				+ limitMemoryDigits + "|\\d)\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
+		 System.out.println(RE_add_mov + "\n" + RE_inc + "\n" + RE_imul);
+		System.out.println(
+				"LB: " + WIDTH_barramento + " TP: " + SIZE_word + " Tamanho Max Instrução: " + tamanho_MAX_INSTRUCAO);
+		switch (SIZE_word) {
+		case 16:
+			System.out.println("$$$$ Palavra deverá ser SHORT.");
+			break;
+		case 32:
+			System.out.println("$$$$ Palavra deverá ser INT.");
+			break;
+		case 64:
+			System.out.println("$$$$ Palavra deverá ser LONG.");
+			break;
+
+		default:
+			System.err.println("Erro no tamanho da palavra.");
+			System.exit(0);
+			break;
+		}
 	}
 
 }
