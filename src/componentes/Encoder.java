@@ -23,11 +23,9 @@ public class Encoder {
 
 	public void run() {
 		mostrarInstrucoes();
-		// codificar as instruçõess
 		codificar();
 		mostrarInstrucoesCodificadas();
 		// passar as instruções pro e/s de acordo com o tamanho do buffer
-
 	}
 
 	public InstrucaoCodificada mandarInstrucoesParaModuloES() {
@@ -356,106 +354,6 @@ public class Encoder {
 		}
 		return instruction;
 	}
-
-	// REFATORAR
-	// public Object[] transformarDeLongProCodigoFinal(long code[], int
-	// palavraSize) {
-	// Object[] instruction = null;
-	// char type = (code[0] + "").charAt(0);
-	// switch (palavraSize) {
-	// case 16:
-	// switch (type) {
-	// case '3': // mov
-	// instruction = new Short[3];
-	// instruction[0] = (short) code[0];
-	// instruction[1] = (short) code[1];
-	// instruction[2] = (short) code[2];
-	// break;
-	// case '4': // add
-	// instruction = new Short[3];
-	// instruction[0] = (short) code[0];
-	// instruction[1] = (short) code[1];
-	// instruction[2] = (short) code[2];
-	// break;
-	// case '5': // inc
-	// instruction = new Short[2];
-	// instruction[0] = (short) code[0];
-	// instruction[1] = (short) code[1];
-	// break;
-	// case '6': // imul
-	// instruction = new Short[4];
-	// instruction[0] = (short) code[0];
-	// instruction[1] = (short) code[1];
-	// instruction[2] = (short) code[2];
-	// instruction[3] = (short) code[3];
-	// break;
-	// }
-	// break;
-	// case 32:
-	// switch (type) {
-	// case '3': // mov
-	// instruction = new Integer[3];
-	// instruction[0] = (int) code[0];
-	// instruction[1] = (int) code[1];
-	// instruction[2] = (int) code[2];
-	// break;
-	// case '4': // add
-	// instruction = new Integer[3];
-	// instruction[0] = (int) code[0];
-	// instruction[1] = (int) code[1];
-	// instruction[2] = (int) code[2];
-	// break;
-	// case '5': // inc
-	// instruction = new Integer[2];
-	// instruction[0] = (int) code[0];
-	// instruction[1] = (int) code[1];
-	// break;
-	// case '6': // imul
-	// instruction = new Integer[4];
-	// instruction[0] = (int) code[0];
-	// instruction[1] = (int) code[1];
-	// instruction[2] = (int) code[2];
-	// instruction[3] = (int) code[3];
-	// break;
-	// }
-	// break;
-	// case 64:
-	// switch (type) {
-	// case '3': // mov
-	// instruction = new Long[3];
-	// instruction[0] = (long) code[0];
-	// instruction[1] = (long) code[1];
-	// instruction[2] = (long) code[2];
-	// break;
-	// case '4': // add
-	// instruction = new Long[3];
-	// instruction[0] = (long) code[0];
-	// instruction[1] = (long) code[1];
-	// instruction[2] = (long) code[2];
-	// break;
-	// case '5': // inc
-	// instruction = new Long[2];
-	// instruction[0] = (long) code[0];
-	// instruction[1] = (long) code[1];
-	// break;
-	// case '6': // imul
-	// instruction = new Long[4];
-	// instruction[0] = (long) code[0];
-	// instruction[1] = (long) code[1];
-	// instruction[2] = (long) code[2];
-	// instruction[3] = (long) code[3];
-	// break;
-	// }
-	// break;
-	//
-	// default:
-	// System.out.println("error no tamanho da palavra");
-	// System.exit(0);
-	// break;
-	// }
-	//
-	// return instruction;
-	// }
 
 	public void mostrarInstrucoesCodificadas() {
 		if (instrucoesCodificadas.size() == 0)

@@ -29,7 +29,7 @@ public class Barramento extends Thread {
 
 	private boolean enviarDado() {
 		if (dados.size() > 0) {
-			Dado d = dados.peek();
+//			Dado d = dados.peek();
 			// fazer algo
 			dados.poll();
 			return true;
@@ -39,7 +39,7 @@ public class Barramento extends Thread {
 
 	private boolean enviarEndereco() {
 		if (enderecos.size() > 0) {
-			Endereco e = enderecos.peek();
+//			Endereco e = enderecos.peek();
 			// fazer algo
 			enderecos.poll();
 			return true;
@@ -49,18 +49,12 @@ public class Barramento extends Thread {
 
 	private boolean enviarSinal() {
 		if (sinais.size() > 0) {
-			Sinal s = sinais.peek();
+//			Sinal s = sinais.peek();
 			// fazer algo
 			sinais.poll();
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public synchronized void start() {
-		// TODO Auto-generated method stub
-		super.start();
 	}
 
 	@Override
