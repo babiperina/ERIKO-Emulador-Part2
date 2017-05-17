@@ -14,6 +14,7 @@ public class Computador {
 	public static Barramento barramento = new Barramento();
 	public static CPU cpu = new CPU();
 	public static ES es = new ES();
+	public static boolean ligado = true;
 
 	public static void main(String[] args) {
 
@@ -21,13 +22,16 @@ public class Computador {
 		parser.run();
 		encoder.run();
 		System.out.println(es.toString());
-		for (int i = 0; i < 10; i++) {
+		while (ligado) {
 			barramento.run();
 			es.run();
 			cpu.run();
+			if (encoder.todasInstrucoesNaES() && es.bufferVazio()) {
+				ligado = false;
+			}
 		}
-		encoder.mostrarInstrucoesCodificadas(); //teste
-		System.out.println(es.toString()); //teste
+		encoder.mostrarInstrucoesCodificadas(); // teste
+		System.out.println(es.toString()); // teste
 
 	}
 

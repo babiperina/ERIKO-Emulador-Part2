@@ -22,6 +22,14 @@ public class ES extends Thread {
 		tamanhoInstrucoes = Constantes.QTDE_ESP_INST;
 	}
 
+	public boolean bufferVazio() {
+		for (byte b : buffer) {
+			if (b != -1)
+				return false;
+		}
+		return true;
+	}
+
 	@Override
 	public void run() {
 		System.out.println("CI Escrita: " + bufferCIE); // teste
@@ -61,40 +69,9 @@ public class ES extends Thread {
 				}
 				bufferCIE = tamanhoInstrucoes;
 			}
-		} else if (bufferCIE == 0) {
-			if (buffer[0] == -1) {
-				InstrucaoCodificada instructionIn = encoder.mandarInstrucoesParaModuloES();
-				if (instructionIn != null) {
-					byte[] b;
-					if (instructionIn.getInstrucaoCodificada()[0] instanceof Long) {
-						long[] l = new long[instructionIn.getInstrucaoCodificada().length];
-						for (int i = 0; i < l.length; i++) {
-							l[i] = (long) instructionIn.getInstrucaoCodificada()[i];
-						}
-						b = divideBytes(l);
-					} else if (instructionIn.getInstrucaoCodificada()[0] instanceof Integer) {
-						int[] inti = new int[instructionIn.getInstrucaoCodificada().length];
-						for (int i = 0; i < inti.length; i++) {
-							inti[i] = (int) instructionIn.getInstrucaoCodificada()[i];
-						}
-						b = divideBytes(inti);
-					} else {
-						short[] s = new short[instructionIn.getInstrucaoCodificada().length];
-						for (int i = 0; i < s.length; i++) {
-							s[i] = (short) instructionIn.getInstrucaoCodificada()[i];
-						}
-						b = divideBytes(s);
-					}
-
-					for (int i = 0; i < tamanhoInstrucoes; i++) {
-						if (i < b.length)
-							buffer[i] = b[i];
-
-					}
-					bufferCIE = tamanhoInstrucoes;
-				}
-			}
-		} else if (bufferCIE == tamanhoInstrucoes) {
+		} else if (bufferCIE == buffer.length) {
+			mandarInstPraRam();
+		} else {
 			if (buffer[bufferCIE] == -1) {
 				InstrucaoCodificada instructionIn = encoder.mandarInstrucoesParaModuloES();
 				if (instructionIn != null) {
@@ -119,54 +96,221 @@ public class ES extends Thread {
 						b = divideBytes(s);
 					}
 
-					for (int i = bufferCIE; i < buffer.length; i++) {
-						if(i-bufferCIE < b.length)
-						buffer[i] = b[i - bufferCIE];
-					}
-					bufferCIE = buffer.length;
+					int cont = 0;
+					for (int i = bufferCIE; i < bufferCIE + tamanhoInstrucoes; i++) {
+						if (cont < b.length)
+							buffer[i] = b[cont++];
 
+					}
+					if (bufferCIE == 0)
+						bufferCIE = tamanhoInstrucoes;
+					else
+						bufferCIE += tamanhoInstrucoes;
 				}
 			}
-		} else if (bufferCIE == buffer.length) {
-			mandarInstPraRam();
 		}
 	}
+	// void puxarInstrucaoDoEncoder() {
+	// if (bufferCIE == -1) {
+	// InstrucaoCodificada instructionIn =
+	// encoder.mandarInstrucoesParaModuloES();
+	// if (instructionIn != null) {
+	// byte[] b;
+	// if (instructionIn.getInstrucaoCodificada()[0] instanceof Long) {
+	// long[] l = new long[instructionIn.getInstrucaoCodificada().length];
+	// for (int i = 0; i < l.length; i++) {
+	// l[i] = (long) instructionIn.getInstrucaoCodificada()[i];
+	// }
+	// b = divideBytes(l);
+	// } else if (instructionIn.getInstrucaoCodificada()[0] instanceof Integer)
+	// {
+	// int[] inti = new int[instructionIn.getInstrucaoCodificada().length];
+	// for (int i = 0; i < inti.length; i++) {
+	// inti[i] = (int) instructionIn.getInstrucaoCodificada()[i];
+	// }
+	// b = divideBytes(inti);
+	// } else {
+	// short[] s = new short[instructionIn.getInstrucaoCodificada().length];
+	// for (int i = 0; i < s.length; i++) {
+	// s[i] = (short) instructionIn.getInstrucaoCodificada()[i];
+	// }
+	// b = divideBytes(s);
+	// }
+	//
+	// for (int i = 0; i < b.length; i++) {
+	// buffer[i] = b[i];
+	// }
+	// bufferCIE = tamanhoInstrucoes;
+	// }
+	// } else if (bufferCIE == 0) {
+	// if (buffer[0] == -1) {
+	// InstrucaoCodificada instructionIn =
+	// encoder.mandarInstrucoesParaModuloES();
+	// if (instructionIn != null) {
+	// byte[] b;
+	// if (instructionIn.getInstrucaoCodificada()[0] instanceof Long) {
+	// long[] l = new long[instructionIn.getInstrucaoCodificada().length];
+	// for (int i = 0; i < l.length; i++) {
+	// l[i] = (long) instructionIn.getInstrucaoCodificada()[i];
+	// }
+	// b = divideBytes(l);
+	// } else if (instructionIn.getInstrucaoCodificada()[0] instanceof Integer)
+	// {
+	// int[] inti = new int[instructionIn.getInstrucaoCodificada().length];
+	// for (int i = 0; i < inti.length; i++) {
+	// inti[i] = (int) instructionIn.getInstrucaoCodificada()[i];
+	// }
+	// b = divideBytes(inti);
+	// } else {
+	// short[] s = new short[instructionIn.getInstrucaoCodificada().length];
+	// for (int i = 0; i < s.length; i++) {
+	// s[i] = (short) instructionIn.getInstrucaoCodificada()[i];
+	// }
+	// b = divideBytes(s);
+	// }
+	//
+	// for (int i = 0; i < tamanhoInstrucoes; i++) {
+	// if (i < b.length)
+	// buffer[i] = b[i];
+	//
+	// }
+	// bufferCIE = tamanhoInstrucoes;
+	// }
+	// }
+	// } else if (bufferCIE == tamanhoInstrucoes) {
+	// if (buffer[bufferCIE] == -1) {
+	// InstrucaoCodificada instructionIn =
+	// encoder.mandarInstrucoesParaModuloES();
+	// if (instructionIn != null) {
+	// byte[] b;
+	// if (instructionIn.getInstrucaoCodificada()[0] instanceof Long) {
+	// long[] l = new long[instructionIn.getInstrucaoCodificada().length];
+	// for (int i = 0; i < l.length; i++) {
+	// l[i] = (long) instructionIn.getInstrucaoCodificada()[i];
+	// }
+	// b = divideBytes(l);
+	// } else if (instructionIn.getInstrucaoCodificada()[0] instanceof Integer)
+	// {
+	// int[] inti = new int[instructionIn.getInstrucaoCodificada().length];
+	// for (int i = 0; i < inti.length; i++) {
+	// inti[i] = (int) instructionIn.getInstrucaoCodificada()[i];
+	// }
+	// b = divideBytes(inti);
+	// } else {
+	// short[] s = new short[instructionIn.getInstrucaoCodificada().length];
+	// for (int i = 0; i < s.length; i++) {
+	// s[i] = (short) instructionIn.getInstrucaoCodificada()[i];
+	// }
+	// b = divideBytes(s);
+	// }
+	//
+	// for (int i = bufferCIE; i < buffer.length; i++) {
+	// if (i - bufferCIE < b.length)
+	// buffer[i] = b[i - bufferCIE];
+	// }
+	// bufferCIE = buffer.length;
+	//
+	// }
+	// }
+	// } else if (bufferCIE == buffer.length) {
+	// mandarInstPraRam();
+	// }
+	// }
 
 	void mandarInstPraRam() {
-		byte instUm[] = new byte[tamanhoInstrucoes];
-		byte instDois[] = new byte[tamanhoInstrucoes];
-		boolean um = false, dois = false;
+		byte b[] = new byte[tamanhoInstrucoes];
 
-		if (buffer[0] != -1) {
-			um = true;
-			System.out.println("Mandar inst 1 pra Ram");
-			for (int i = 0; i < tamanhoInstrucoes; i++) {
-				instUm[i] = buffer[i];
-				buffer[i] = -1;
+		for (int i = 1; i <= Constantes.QTDE_INST_BUFFER; i++) {
+			b = new byte[tamanhoInstrucoes];
+			System.out.println("$$$$ Mandando instrução " + i + " pra RAM.");
+			if (bufferCIE == buffer.length) {
+				bufferCIE = 0;
 			}
-			bufferCIE = tamanhoInstrucoes;
-		}
-		if (buffer[tamanhoInstrucoes] != -1) {
-			dois = true;
-			System.out.println("Mandar inst 2 pra Ram");
-			for (int i = tamanhoInstrucoes; i < buffer.length; i++) {
-				instDois[i - tamanhoInstrucoes] = buffer[i];
-				buffer[i] = -1;
+			int cont = 0;
+			boolean tem = false;
+			for (int j = bufferCIE; j < bufferCIE + tamanhoInstrucoes; j++) {
+				if (j == bufferCIE) {
+					if (buffer[j] != -1 && buffer[j + 1] != -1) {
+						tem = true;
+					}
+				}
+				b[cont++] = buffer[j];
+				buffer[j] = -1;
 			}
-			bufferCIE = 0;
-		}
 
-		Dado dado;
-		if (um) {
-			dado = new Dado(Constantes.id_ES, Constantes.id_RAM, instUm);
+			Dado dado = new Dado(Constantes.id_ES, Constantes.id_RAM, b);
 			barramento.Enfileirar(dado);
+			
+			bufferCIE += tamanhoInstrucoes;
 		}
-		if (dois) {
-			dado = new Dado(Constantes.id_ES, Constantes.id_RAM, instDois);
-			barramento.Enfileirar(dado);
-		}
+		bufferCIE = 0;
+
+		// if (buffer[0] != -1) {
+		// um = true;
+		// System.out.println("Mandar inst 1 pra Ram");
+		// for (int i = 0; i < tamanhoInstrucoes; i++) {
+		// instUm[i] = buffer[i];
+		// buffer[i] = -1;
+		// }
+		// bufferCIE = tamanhoInstrucoes;
+		// }
+		// if (buffer[tamanhoInstrucoes] != -1) {
+		// dois = true;
+		// System.out.println("Mandar inst 2 pra Ram");
+		// for (int i = tamanhoInstrucoes; i < buffer.length; i++) {
+		// instDois[i - tamanhoInstrucoes] = buffer[i];
+		// buffer[i] = -1;
+		// }
+		// bufferCIE = 0;
+		// }
+		//
+		// Dado dado;
+		// if (um) {
+		// dado = new Dado(Constantes.id_ES, Constantes.id_RAM, instUm);
+		// barramento.Enfileirar(dado);
+		// }
+		// if (dois) {
+		// dado = new Dado(Constantes.id_ES, Constantes.id_RAM, instDois);
+		// barramento.Enfileirar(dado);
+		// }
 
 	}
+
+	// void mandarInstPraRam() {
+	// byte instUm[] = new byte[tamanhoInstrucoes];
+	// byte instDois[] = new byte[tamanhoInstrucoes];
+	// boolean um = false, dois = false;
+	//
+	// if (buffer[0] != -1) {
+	// um = true;
+	// System.out.println("Mandar inst 1 pra Ram");
+	// for (int i = 0; i < tamanhoInstrucoes; i++) {
+	// instUm[i] = buffer[i];
+	// buffer[i] = -1;
+	// }
+	// bufferCIE = tamanhoInstrucoes;
+	// }
+	// if (buffer[tamanhoInstrucoes] != -1) {
+	// dois = true;
+	// System.out.println("Mandar inst 2 pra Ram");
+	// for (int i = tamanhoInstrucoes; i < buffer.length; i++) {
+	// instDois[i - tamanhoInstrucoes] = buffer[i];
+	// buffer[i] = -1;
+	// }
+	// bufferCIE = 0;
+	// }
+	//
+	// Dado dado;
+	// if (um) {
+	// dado = new Dado(Constantes.id_ES, Constantes.id_RAM, instUm);
+	// barramento.Enfileirar(dado);
+	// }
+	// if (dois) {
+	// dado = new Dado(Constantes.id_ES, Constantes.id_RAM, instDois);
+	// barramento.Enfileirar(dado);
+	// }
+	//
+	// }
 
 	void inicializarBuffer() {
 		for (int i = 0; i < buffer.length; i++) {

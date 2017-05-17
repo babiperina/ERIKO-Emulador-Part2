@@ -13,6 +13,14 @@ public class Encoder {
 	public ArrayList<String> instrucoes = new ArrayList<>();
 	public ArrayList<InstrucaoCodificada> instrucoesCodificadas = new ArrayList<>();
 
+	public boolean todasInstrucoesNaES() {
+		for (InstrucaoCodificada ic : instrucoesCodificadas) {
+			if (!ic.isES())
+				return false;
+		}
+		return true;
+	}
+
 	public void run() {
 		mostrarInstrucoes();
 		// codificar as instruçõess
@@ -677,7 +685,7 @@ public class Encoder {
 			matcher = m.matcher(z);
 			if (matcher.matches()) {
 				c += "2";
-				code[3] = encoderMemory(z.substring(2));
+				code[3] = encoderMemory(z);
 			} else {
 				c += "3";
 				code[3] = Long.parseLong(z);

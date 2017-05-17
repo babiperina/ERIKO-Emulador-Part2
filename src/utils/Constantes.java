@@ -3,7 +3,7 @@ package utils;
 public class Constantes {
 
 	public static final String ARQUIVO_DE_TEXTO = "assembly";
-
+	
 	public static int id_ES = 37;
 	public static int id_CPU = 278;
 	public static int id_RAM = 726;
@@ -16,7 +16,7 @@ public class Constantes {
 	public static int SIZE_e_s_buffer;
 	public static int TAM_MAX_INST;
 	public static int QTDE_ESP_INST;
-	public static int QTDE_INST_BUFFER = 2;
+	public static int QTDE_INST_BUFFER = 5;
 
 	private static void setSizeBuffer() {
 		int qtde_esp_por_palavra = SIZE_word / 8;
@@ -24,7 +24,7 @@ public class Constantes {
 		SIZE_e_s_buffer = QTDE_ESP_INST * QTDE_INST_BUFFER;
 	}
 
-	public static int WIDTH_barramento = 32; // bits
+	public static int WIDTH_barramento = 8; // bits
 	public static String limitMemoryDigits;
 
 	public static void setTamanhoMaxInstrucao() {
@@ -41,7 +41,7 @@ public class Constantes {
 			break;
 
 		default:
-			System.err.println("Tamanho de largura de barramento inválido.");
+			System.err.println("Tamanho de largura de barramento invï¿½lido.");
 			System.exit(0);
 			break;
 		}
