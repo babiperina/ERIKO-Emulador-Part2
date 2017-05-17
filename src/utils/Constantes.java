@@ -18,63 +18,78 @@ public class Constantes {
 	public static int QTDE_ESP_INST;
 	public static int QTDE_INST_BUFFER = 2;
 
-
 	private static void setSizeBuffer() {
-		int qtde_esp_por_palavra = SIZE_word/8;
-		QTDE_ESP_INST = qtde_esp_por_palavra*TAM_MAX_INST;
+		int qtde_esp_por_palavra = SIZE_word / 8;
+		QTDE_ESP_INST = qtde_esp_por_palavra * TAM_MAX_INST;
 		SIZE_e_s_buffer = QTDE_ESP_INST * QTDE_INST_BUFFER;
 	}
 
-	public static int WIDTH_barramento = 8; // bits
+	public static int WIDTH_barramento = 32; // bits
 	public static String limitMemoryDigits;
 
 	public static void setTamanhoMaxInstrucao() {
-		
-		
+
 		switch (WIDTH_barramento) {
 		case 8:
-			switch (SIZE_word) {
-			case 16:
-				TAM_MAX_INST = 3;
-				break;
-			case 32:
-				TAM_MAX_INST = 2;
-				break;
-			case 64:
-				TAM_MAX_INST = 2;
-				break;
-			}
+			TAM_MAX_INST = 4;
 			break;
 		case 16:
-			switch (SIZE_word) {
-			case 16:
-				TAM_MAX_INST = 4;
-				break;
-			case 32:
-				TAM_MAX_INST = 3;
-				break;
-			case 64:
-				TAM_MAX_INST = 2;
-				break;
-			}
+			TAM_MAX_INST = 8;
 			break;
 		case 32:
-			switch (SIZE_word) {
-			case 16:
-				TAM_MAX_INST = 7;
-				break;
-			case 32:
-				TAM_MAX_INST = 4;
-				break;
-			case 64:
-				TAM_MAX_INST = 3;
-				break;
-			}
+			TAM_MAX_INST = 16;
 			break;
+
 		default:
-			System.err.println("Tamanho de largura de barramento inválido.");
+			System.err.println("Tamanho de largura de barramento inv�lido.");
+			System.exit(0);
 			break;
 		}
+
+		// switch (WIDTH_barramento) {
+		// case 8:
+		// switch (SIZE_word) {
+		// case 16:
+		// TAM_MAX_INST = 3;
+		// break;
+		// case 32:
+		// TAM_MAX_INST = 2;
+		// break;
+		// case 64:
+		// TAM_MAX_INST = 2;
+		// break;
+		// }
+		// break;
+		// case 16:
+		// switch (SIZE_word) {
+		// case 16:
+		// TAM_MAX_INST = 4;
+		// break;
+		// case 32:
+		// TAM_MAX_INST = 3;
+		// break;
+		// case 64:
+		// TAM_MAX_INST = 2;
+		// break;
+		// }
+		// break;
+		// case 32:
+		// switch (SIZE_word) {
+		// case 16:
+		// TAM_MAX_INST = 7;
+		// break;
+		// case 32:
+		// TAM_MAX_INST = 4;
+		// break;
+		// case 64:
+		// TAM_MAX_INST = 3;
+		// break;
+		// }
+		// break;
+		// default:
+		// System.err.println("Tamanho de largura de barramento inválido.");
+		// break;
+		// }
 
 	}
 
@@ -151,11 +166,10 @@ public class Constantes {
 		RE_add_mov = "^(add|mov)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*,"
 				+ "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
 		RE_inc = "^(inc)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*$";
-		RE_imul = "^(imul)\\s+([a-dA-D]|0x[a-fA-F0-9] " + limitMemoryDigits + ")\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]"
-				+ limitMemoryDigits + "|\\d)\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
+		RE_imul = "^(imul)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]"
+				+ limitMemoryDigits + "|\\d+)\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
 		System.out.println(RE_add_mov + "\n" + RE_inc + "\n" + RE_imul);
-		System.out.println(
-				"LB: " + WIDTH_barramento + " TP: " + SIZE_word + " TAM_MAX_INST: " + TAM_MAX_INST);
+		System.out.println("LB: " + WIDTH_barramento + " TP: " + SIZE_word + " TAM_MAX_INST: " + TAM_MAX_INST);
 		switch (SIZE_word) {
 		case 16:
 			System.out.println("$$$$ Palavra deverá ser SHORT.");

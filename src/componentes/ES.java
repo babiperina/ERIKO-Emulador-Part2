@@ -120,6 +120,7 @@ public class ES extends Thread {
 					}
 
 					for (int i = bufferCIE; i < buffer.length; i++) {
+						if(i-bufferCIE < b.length)
 						buffer[i] = b[i - bufferCIE];
 					}
 					bufferCIE = buffer.length;

@@ -68,8 +68,8 @@ public class Barramento extends Thread {
 
 		System.out.println("***************************************");
 		System.out.println(dados.size() + "--------- Enviando um dado : " + enviarDado() + " ---------");
-		System.out.println("--------- Enviando um endereço : " + enviarEndereco() + " ---------");
-		System.out.println("--------- Enviando um sinal : " + enviarSinal() + " ---------");
+		System.out.println(enderecos.size() + "--------- Enviando um endereço : " + enviarEndereco() + " ---------");
+		System.out.println(sinais.size() + "--------- Enviando um sinal : " + enviarSinal() + " ---------");
 
 		super.run();
 	}

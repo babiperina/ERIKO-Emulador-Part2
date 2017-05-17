@@ -52,110 +52,402 @@ public class Encoder {
 			}
 			System.out.println();
 
-			codificada = new InstrucaoCodificada(transformarDeLongProCodigoFinal(code, Constantes.SIZE_word));
+			codificada = new InstrucaoCodificada(
+					transformarDeLongProCodigoFinal(code, Constantes.SIZE_word, Constantes.WIDTH_barramento));
 			instrucoesCodificadas.add(codificada);
 
 			instrucoes.remove(0);
 		}
 	}
 
-	public Object[] transformarDeLongProCodigoFinal(long code[], int palavraSize) {
+	public Object[] transformarDeLongProCodigoFinal(long code[], int TP, int LB) {
 		Object[] instruction = null;
 		char type = (code[0] + "").charAt(0);
-		switch (palavraSize) {
+		short auxS;
+		int auxI;
+		long auxL;
+		switch (LB) {
+		case 8:
+			switch (TP) {
+			case 16:
+				switch (type) {
+				case '3':
+				case '4':
+					// add e mov
+					instruction = new Short[2];
+					auxS = (short) code[0];
+					auxS ^= (code[1] << 8);
+					instruction[0] = auxS;
+					auxS = (short) code[2];
+					instruction[1] = auxS;
+					break;
+				case '5':
+					// inc
+					instruction = new Short[1];
+					auxS = (short) code[0];
+					auxS ^= (code[1] << 8);
+					instruction[0] = auxS;
+					break;
+				case '6':
+					// imul
+					instruction = new Short[2];
+					auxS = (short) code[0];
+					auxS ^= (code[1] << 8);
+					instruction[0] = auxS;
+					auxS = (short) code[2];
+					auxS ^= (code[3] << 8);
+					instruction[1] = auxS;
+					break;
+				}
+				break;
+			case 32:
+				switch (type) {
+				case '3':
+				case '4':
+					// add e mov
+					instruction = new Integer[1];
+					auxI = (int) code[0];
+					auxI ^= (code[1] << 8);
+					auxI ^= (code[2] << 8 * 2);
+					instruction[0] = auxI;
+					break;
+				case '5':
+					// inc
+					instruction = new Integer[1];
+					auxI = (int) code[0];
+					auxI ^= (code[1] << 8);
+					instruction[0] = auxI;
+					break;
+				case '6':
+					// imul
+					instruction = new Integer[1];
+					auxI = (int) code[0];
+					auxI ^= (code[1] << 8);
+					auxI ^= (code[2] << 8 * 2);
+					auxI ^= (code[3] << 8 * 3);
+					instruction[0] = auxI;
+					break;
+				}
+				break;
+			case 64:
+				switch (type) {
+				case '3':
+				case '4':
+					// add e mov
+					instruction = new Long[1];
+					auxL = (long) code[0];
+					auxL ^= (code[1] << 8);
+					auxL ^= (code[2] << 8 * 2);
+					instruction[0] = auxL;
+					break;
+				case '5':
+					// inc
+					instruction = new Long[1];
+					auxL = (long) code[0];
+					auxL ^= (code[1] << 8);
+					instruction[0] = auxL;
+					break;
+				case '6':
+					// imul
+					instruction = new Long[1];
+					auxL = (long) code[0];
+					auxL ^= (code[1] << 8);
+					auxL ^= (code[2] << 8 * 2);
+					auxL ^= (code[3] << 8 * 3);
+					instruction[0] = auxL;
+					break;
+				}
+				break;
+			}
+			break;
 		case 16:
-			switch (type) {
-			case '3': // mov
-				instruction = new Short[3];
-				instruction[0] = (short) code[0];
-				instruction[1] = (short) code[1];
-				instruction[2] = (short) code[2];
+			switch (TP) {
+			case 16:
+				switch (type) {
+				case '3':
+				case '4':
+					// add e mov
+					instruction = new Short[3];
+					instruction[0] = (short) code[0];
+					instruction[1] = (short) code[1];
+					instruction[2] = (short) code[2];
+					break;
+				case '5':
+					// inc
+					instruction = new Short[2];
+					instruction[0] = (short) code[0];
+					instruction[1] = (short) code[1];
+					break;
+				case '6':
+					// imul
+					instruction = new Short[4];
+					instruction[0] = (short) code[0];
+					instruction[1] = (short) code[1];
+					instruction[2] = (short) code[2];
+					instruction[3] = (short) code[3];
+					break;
+				}
 				break;
-			case '4': // add
-				instruction = new Short[3];
-				instruction[0] = (short) code[0];
-				instruction[1] = (short) code[1];
-				instruction[2] = (short) code[2];
+			case 32:
+				switch (type) {
+				case '3':
+				case '4':
+					// add e mov
+					instruction = new Integer[2];
+					auxI = (int) code[0];
+					auxI ^= (code[1] << 8);
+					instruction[0] = auxI;
+					instruction[1] = (int) code[2];
+					break;
+				case '5':
+					// inc
+					instruction = new Integer[1];
+					auxI = (int) code[0];
+					auxI ^= (code[1] << 8);
+					instruction[0] = auxI;
+					break;
+				case '6':
+					// imul
+					instruction = new Integer[2];
+					auxI = (int) code[0];
+					auxI ^= (code[1] << 8);
+					instruction[0] = auxI;
+					auxI = (int) code[2];
+					auxI ^= (code[3] << 8);
+					instruction[1] = auxI;
+					break;
+				}
 				break;
-			case '5': // inc
-				instruction = new Short[2];
-				instruction[0] = (short) code[0];
-				instruction[1] = (short) code[1];
-				break;
-			case '6': // imul
-				instruction = new Short[4];
-				instruction[0] = (short) code[0];
-				instruction[1] = (short) code[1];
-				instruction[2] = (short) code[2];
-				instruction[3] = (short) code[3];
+			case 64:
+				switch (type) {
+				case '3':
+				case '4':
+					// add e mov
+					instruction = new Long[1];
+					auxL = (long) code[0];
+					auxL ^= (code[1] << 8);
+					auxL ^= (code[2] << 8 * 2);
+					instruction[0] = auxL;
+					break;
+				case '5':
+					// inc
+					instruction = new Long[1];
+					auxL = (long) code[0];
+					auxL ^= (code[1] << 8);
+					instruction[0] = auxL;
+					break;
+				case '6':
+					// imul
+					instruction = new Long[1];
+					auxL = (long) code[0];
+					auxL ^= (code[1] << 8);
+					auxL ^= (code[2] << 8 * 2);
+					auxL ^= (code[3] << 8 * 3);
+					instruction[0] = auxL;
+					break;
+				}
 				break;
 			}
 			break;
 		case 32:
-			switch (type) {
-			case '3': // mov
-				instruction = new Integer[3];
-				instruction[0] = (int) code[0];
-				instruction[1] = (int) code[1];
-				instruction[2] = (int) code[2];
+			switch (TP) {
+			case 16:
+				switch (type) {
+				case '3':
+				case '4':
+					// add e mov
+					instruction = new Short[6];
+					instruction[0] = (short) ((code[0] >> 8 * 0) & 0xFF);
+					instruction[1] = (short) ((code[0] >> 8 * 1) & 0xFF);
+					instruction[2] = (short) ((code[1] >> 8 * 0) & 0xFF);
+					instruction[3] = (short) ((code[1] >> 8 * 1) & 0xFF);
+					instruction[4] = (short) ((code[2] >> 8 * 0) & 0xFF);
+					instruction[5] = (short) ((code[2] >> 8 * 1) & 0xFF);
+					break;
+				case '5':
+					// inc
+					instruction = new Short[4];
+					instruction[0] = (short) ((code[0] >> 8 * 0) & 0xFF);
+					instruction[1] = (short) ((code[0] >> 8 * 1) & 0xFF);
+					instruction[2] = (short) ((code[1] >> 8 * 0) & 0xFF);
+					instruction[3] = (short) ((code[1] >> 8 * 1) & 0xFF);
+					break;
+				case '6':
+					// imul
+					instruction = new Short[8];
+					instruction[0] = (short) ((code[0] >> 8 * 0) & 0xFF);
+					instruction[1] = (short) ((code[0] >> 8 * 1) & 0xFF);
+					instruction[2] = (short) ((code[1] >> 8 * 0) & 0xFF);
+					instruction[3] = (short) ((code[1] >> 8 * 1) & 0xFF);
+					instruction[4] = (short) ((code[2] >> 8 * 0) & 0xFF);
+					instruction[5] = (short) ((code[2] >> 8 * 1) & 0xFF);
+					instruction[6] = (short) ((code[3] >> 8 * 0) & 0xFF);
+					instruction[7] = (short) ((code[3] >> 8 * 1) & 0xFF);
+					break;
+				}
 				break;
-			case '4': // add
-				instruction = new Integer[3];
-				instruction[0] = (int) code[0];
-				instruction[1] = (int) code[1];
-				instruction[2] = (int) code[2];
-				break;
-			case '5': // inc
-				instruction = new Integer[2];
-				instruction[0] = (int) code[0];
-				instruction[1] = (int) code[1];
-				break;
-			case '6': // imul
-				instruction = new Integer[4];
-				instruction[0] = (int) code[0];
-				instruction[1] = (int) code[1];
-				instruction[2] = (int) code[2];
-				instruction[3] = (int) code[3];
-				break;
-			}
-			break;
-		case 64:
-			switch (type) {
-			case '3': // mov
-				instruction = new Long[3];
-				instruction[0] = (long) code[0];
-				instruction[1] = (long) code[1];
-				instruction[2] = (long) code[2];
-				break;
-			case '4': // add
-				instruction = new Long[3];
-				instruction[0] = (long) code[0];
-				instruction[1] = (long) code[1];
-				instruction[2] = (long) code[2];
-				break;
-			case '5': // inc
-				instruction = new Long[2];
-				instruction[0] = (long) code[0];
-				instruction[1] = (long) code[1];
-				break;
-			case '6': // imul
-				instruction = new Long[4];
-				instruction[0] = (long) code[0];
-				instruction[1] = (long) code[1];
-				instruction[2] = (long) code[2];
-				instruction[3] = (long) code[3];
-				break;
-			}
-			break;
+			case 32:
+				switch (type) {
+				case '3':
+				case '4':
+					// add e mov
+					instruction = new Integer[3];
+					instruction[0] = (int) code[0];
+					instruction[1] = (int) code[1];
+					instruction[2] = (int) code[2];
+					break;
+				case '5':
+					// inc
+					instruction = new Integer[2];
+					instruction[0] = (int) code[0];
+					instruction[1] = (int) code[1];
 
-		default:
-			System.out.println("error no tamanho da palavra");
-			System.exit(0);
+					break;
+				case '6':
+					// imul
+					instruction = new Integer[4];
+					instruction[0] = (int) code[0];
+					instruction[1] = (int) code[1];
+					instruction[2] = (int) code[2];
+					instruction[3] = (int) code[3];
+					break;
+				}
+				break;
+			case 64:
+				switch (type) {
+				case '3':
+				case '4':
+					// add e mov
+					instruction = new Long[2];
+					auxL = (long) code[0];
+					auxL ^= (code[1] << 8);
+					instruction[0] = auxL;
+					instruction[1] = code[2];
+					break;
+				case '5':
+					// inc
+					instruction = new Long[1];
+					auxL = (long) code[0];
+					auxL ^= (code[1] << 8);
+					instruction[0] = auxL;
+					break;
+				case '6':
+					// imul
+					instruction = new Long[2];
+					auxL = (long) code[0];
+					auxL ^= (code[1] << 8);
+					instruction[0] = auxL;
+					auxL = (long) code[2];
+					auxL ^= (code[3] << 8);
+					instruction[1] = auxL;
+					break;
+				}
+				break;
+			}
 			break;
 		}
-
 		return instruction;
 	}
+
+	// REFATORAR
+	// public Object[] transformarDeLongProCodigoFinal(long code[], int
+	// palavraSize) {
+	// Object[] instruction = null;
+	// char type = (code[0] + "").charAt(0);
+	// switch (palavraSize) {
+	// case 16:
+	// switch (type) {
+	// case '3': // mov
+	// instruction = new Short[3];
+	// instruction[0] = (short) code[0];
+	// instruction[1] = (short) code[1];
+	// instruction[2] = (short) code[2];
+	// break;
+	// case '4': // add
+	// instruction = new Short[3];
+	// instruction[0] = (short) code[0];
+	// instruction[1] = (short) code[1];
+	// instruction[2] = (short) code[2];
+	// break;
+	// case '5': // inc
+	// instruction = new Short[2];
+	// instruction[0] = (short) code[0];
+	// instruction[1] = (short) code[1];
+	// break;
+	// case '6': // imul
+	// instruction = new Short[4];
+	// instruction[0] = (short) code[0];
+	// instruction[1] = (short) code[1];
+	// instruction[2] = (short) code[2];
+	// instruction[3] = (short) code[3];
+	// break;
+	// }
+	// break;
+	// case 32:
+	// switch (type) {
+	// case '3': // mov
+	// instruction = new Integer[3];
+	// instruction[0] = (int) code[0];
+	// instruction[1] = (int) code[1];
+	// instruction[2] = (int) code[2];
+	// break;
+	// case '4': // add
+	// instruction = new Integer[3];
+	// instruction[0] = (int) code[0];
+	// instruction[1] = (int) code[1];
+	// instruction[2] = (int) code[2];
+	// break;
+	// case '5': // inc
+	// instruction = new Integer[2];
+	// instruction[0] = (int) code[0];
+	// instruction[1] = (int) code[1];
+	// break;
+	// case '6': // imul
+	// instruction = new Integer[4];
+	// instruction[0] = (int) code[0];
+	// instruction[1] = (int) code[1];
+	// instruction[2] = (int) code[2];
+	// instruction[3] = (int) code[3];
+	// break;
+	// }
+	// break;
+	// case 64:
+	// switch (type) {
+	// case '3': // mov
+	// instruction = new Long[3];
+	// instruction[0] = (long) code[0];
+	// instruction[1] = (long) code[1];
+	// instruction[2] = (long) code[2];
+	// break;
+	// case '4': // add
+	// instruction = new Long[3];
+	// instruction[0] = (long) code[0];
+	// instruction[1] = (long) code[1];
+	// instruction[2] = (long) code[2];
+	// break;
+	// case '5': // inc
+	// instruction = new Long[2];
+	// instruction[0] = (long) code[0];
+	// instruction[1] = (long) code[1];
+	// break;
+	// case '6': // imul
+	// instruction = new Long[4];
+	// instruction[0] = (long) code[0];
+	// instruction[1] = (long) code[1];
+	// instruction[2] = (long) code[2];
+	// instruction[3] = (long) code[3];
+	// break;
+	// }
+	// break;
+	//
+	// default:
+	// System.out.println("error no tamanho da palavra");
+	// System.exit(0);
+	// break;
+	// }
+	//
+	// return instruction;
+	// }
 
 	public void mostrarInstrucoesCodificadas() {
 		if (instrucoesCodificadas.size() == 0)
@@ -168,7 +460,6 @@ public class Encoder {
 			System.out.println(cont++ + " - " + instrucao);
 		}
 	}
-
 
 	public void mostrarInstrucoes() {
 		if (instrucoes.size() == 0)
@@ -360,7 +651,7 @@ public class Encoder {
 			code[1] = encoderRegister(x);
 		} else {
 			c += "2";
-			code[1] = encoderMemory(x.substring(2));
+			code[1] = encoderMemory(x);
 		}
 
 		matcher = r.matcher(y);
@@ -374,7 +665,7 @@ public class Encoder {
 				code[2] = encoderMemory(y);
 			} else {
 				c += "3";
-				code[2] = Long.parseLong(y.substring(2));
+				code[2] = Long.parseLong(y);
 			}
 		}
 

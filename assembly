@@ -1,6 +1,4 @@
-mov A, 25
-add B, 3
-mov 0x2, A
-add A, 5
-inc A
-mov 0x4, 0xf
+mov A, 3
+add 0x2, 0x3
+inc B
+imul 0x2, 2, 6
