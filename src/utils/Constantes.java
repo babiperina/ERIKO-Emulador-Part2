@@ -41,55 +41,10 @@ public class Constantes {
 			break;
 
 		default:
-			System.err.println("Tamanho de largura de barramento inv�lido.");
+			System.err.println("Tamanho de largura de barramento inválido.");
 			System.exit(0);
 			break;
 		}
-
-		// switch (WIDTH_barramento) {
-		// case 8:
-		// switch (SIZE_word) {
-		// case 16:
-		// TAM_MAX_INST = 3;
-		// break;
-		// case 32:
-		// TAM_MAX_INST = 2;
-		// break;
-		// case 64:
-		// TAM_MAX_INST = 2;
-		// break;
-		// }
-		// break;
-		// case 16:
-		// switch (SIZE_word) {
-		// case 16:
-		// TAM_MAX_INST = 4;
-		// break;
-		// case 32:
-		// TAM_MAX_INST = 3;
-		// break;
-		// case 64:
-		// TAM_MAX_INST = 2;
-		// break;
-		// }
-		// break;
-		// case 32:
-		// switch (SIZE_word) {
-		// case 16:
-		// TAM_MAX_INST = 7;
-		// break;
-		// case 32:
-		// TAM_MAX_INST = 4;
-		// break;
-		// case 64:
-		// TAM_MAX_INST = 3;
-		// break;
-		// }
-		// break;
-		// default:
-		// System.err.println("Tamanho de largura de barramento inválido.");
-		// break;
-		// }
 
 	}
 

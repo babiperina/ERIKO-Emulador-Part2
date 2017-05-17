@@ -9,7 +9,7 @@ public class CPU extends Thread {
 	private Barramento barramento;
 	
 	public CPU() {
-		barramento = Computador.barramento;
+		setBarramento(Computador.barramento);
 	}
 
 	public void enviarSinal() {
@@ -31,6 +31,14 @@ public class CPU extends Thread {
 	public void run() {
 		enviarSinal();
 		super.run();
+	}
+
+	public Barramento getBarramento() {
+		return barramento;
+	}
+
+	public void setBarramento(Barramento barramento) {
+		this.barramento = barramento;
 	}
 
 }
