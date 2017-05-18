@@ -6,6 +6,7 @@ import principal.Computador;
 import utils.Constantes;
 import utils.Dado;
 import utils.InstrucaoCodificada;
+import utils.Sinal;
 
 public class ES extends Thread {
 
@@ -35,7 +36,7 @@ public class ES extends Thread {
 		System.out.println("CI Escrita: " + bufferCIE); // teste
 		System.out.println("Tamanho buffer: " + buffer.length); // teste
 		puxarInstrucaoDoEncoder();
-		System.out.println(toString()); // buffer print teste
+//		System.out.println(toString()); // buffer print teste
 		super.run();
 	}
 
@@ -70,7 +71,8 @@ public class ES extends Thread {
 				bufferCIE = tamanhoInstrucoes;
 			}
 		} else if (bufferCIE == buffer.length) {
-			mandarInstPraRam();
+			Sinal sinal = new Sinal(Constantes.id_ES, Constantes.id_RAM, Constantes.id_SINAL_ESC);
+			enviarSinalRam(sinal);
 		} else {
 			if (buffer[bufferCIE] == -1) {
 				InstrucaoCodificada instructionIn = encoder.mandarInstrucoesParaModuloES();
@@ -111,12 +113,20 @@ public class ES extends Thread {
 		}
 	}
 
+	private void enviarSinalRam(Sinal sinal) {
+		barramento.Enfileirar(sinal);
+	}
+	
+	public void enviarDadoRam(){
+		mandarInstPraRam();
+	}
+
 	void mandarInstPraRam() {
 		byte b[] = new byte[tamanhoInstrucoes];
 
 		for (int i = 1; i <= Constantes.QTDE_INST_BUFFER; i++) {
 			b = new byte[tamanhoInstrucoes];
-			System.out.println("$$$$ Mandando instrução " + i + " pra RAM.");
+			System.out.println("$$$$ Mandando dado " + i + " pro Barramento.");
 			if (bufferCIE == buffer.length) {
 				bufferCIE = 0;
 			}
@@ -134,7 +144,7 @@ public class ES extends Thread {
 
 			Dado dado = new Dado(Constantes.id_ES, Constantes.id_RAM, b);
 			barramento.Enfileirar(dado);
-			
+
 			bufferCIE += tamanhoInstrucoes;
 		}
 		bufferCIE = 0;

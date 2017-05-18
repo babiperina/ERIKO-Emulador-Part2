@@ -5,6 +5,7 @@ import componentes.CPU;
 import componentes.ES;
 import componentes.Encoder;
 import componentes.Parser;
+import componentes.Ram;
 import utils.Constantes;
 
 public class Computador {
@@ -13,6 +14,7 @@ public class Computador {
 	public static Encoder encoder = new Encoder();
 	public static Barramento barramento = new Barramento();
 	public static CPU cpu = new CPU();
+	public static Ram ram = new Ram();
 	public static ES es = new ES();
 	public static boolean ligado = true;
 
@@ -26,10 +28,12 @@ public class Computador {
 			barramento.run();
 			es.run();
 			cpu.run();
-			if (encoder.todasInstrucoesNaES() && es.bufferVazio()) {
+			ram.run();
+			if (encoder.todasInstrucoesNaES() && es.bufferVazio() && barramento.dados.isEmpty()) {
 				ligado = false;
 			}
 		}
+		System.out.println(barramento.dados.size());
 		encoder.mostrarInstrucoesCodificadas(); // teste
 		System.out.println(es.toString()); // teste
 

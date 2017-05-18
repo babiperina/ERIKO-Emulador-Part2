@@ -2,9 +2,9 @@ package utils;
 
 public class Sinal {
 	
+	private int tipo;
 	private int remetente;
 	private int destinatario;
-	private int tipo;
 
 	public Sinal(int remetente, int destinatario, int tipo) {
 		super();

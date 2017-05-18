@@ -29,7 +29,7 @@ public class CPU extends Thread {
 
 	@Override
 	public void run() {
-		enviarSinal();
+//		enviarSinal();
 		super.run();
 	}
 
