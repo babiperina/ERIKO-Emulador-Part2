@@ -3,13 +3,22 @@ package utils;
 public class Endereco {
 	private int remetente;
 	private int destinatario;
-	private int conteudo;
+	private int tipo;
+	private int endereco;
 
-	public Endereco(int remetente, int destinatario, int conteudo) {
+	public Endereco(int remetente, int destinatario, int tipo) {
 		super();
 		this.remetente = remetente;
 		this.destinatario = destinatario;
-		this.conteudo = conteudo;
+		this.setTipo(tipo);
+	}
+
+	public Endereco(int remetente, int destinatario, int tipo, int endereco) {
+		super();
+		this.remetente = remetente;
+		this.destinatario = destinatario;
+		this.setTipo(tipo);
+		this.setEndereco(endereco);
 	}
 
 	public int getRemetente() {
@@ -28,16 +37,19 @@ public class Endereco {
 		this.destinatario = destinatario;
 	}
 
-	public int getConteudo() {
-		return conteudo;
+	public int getTipo() {
+		return tipo;
 	}
 
-	public void setConteudo(int conteudo) {
-		this.conteudo = conteudo;
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
 	}
 
-	@Override
-	public String toString() {
-		return "Endereço [remetente=" + remetente + ", destinatario=" + destinatario + ", conteudo=" + conteudo + "]";
+	public int getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(int endereco) {
+		this.endereco = endereco;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import principal.Computador;
 import utils.Constantes;
 import utils.Dado;
+import utils.Endereco;
 import utils.InstrucaoCodificada;
 import utils.Sinal;
 
@@ -36,7 +37,7 @@ public class ES extends Thread {
 		System.out.println("CI Escrita: " + bufferCIE); // teste
 		System.out.println("Tamanho buffer: " + buffer.length); // teste
 		puxarInstrucaoDoEncoder();
-//		System.out.println(toString()); // buffer print teste
+		System.out.println(toString()); // buffer print teste
 		super.run();
 	}
 
@@ -71,8 +72,11 @@ public class ES extends Thread {
 				bufferCIE = tamanhoInstrucoes;
 			}
 		} else if (bufferCIE == buffer.length) {
+			int qtdeDados = Constantes.QTDE_INST_BUFFER * (Constantes.TAM_MAX_INST * 2);
 			Sinal sinal = new Sinal(Constantes.id_ES, Constantes.id_RAM, Constantes.id_SINAL_ESC);
-			enviarSinalRam(sinal);
+			Dado dado = new Dado(Constantes.id_ES, Constantes.id_RAM, Constantes.id_DADO_QTDE, qtdeDados);
+			Endereco endereco = new Endereco(Constantes.id_ES, Constantes.id_RAM, Constantes.id_END_VAZIO);
+			enviarSinalRam(sinal, dado, endereco);
 		} else {
 			if (buffer[bufferCIE] == -1) {
 				InstrucaoCodificada instructionIn = encoder.mandarInstrucoesParaModuloES();
@@ -113,20 +117,19 @@ public class ES extends Thread {
 		}
 	}
 
-	private void enviarSinalRam(Sinal sinal) {
-		barramento.Enfileirar(sinal);
+	private void enviarSinalRam(Sinal sinal, Dado dado, Endereco endereco) {
+		barramento.Enfileirar(sinal, dado, endereco);
 	}
-	
-	public void enviarDadoRam(){
+
+	public void enviarDadoRam() {
 		mandarInstPraRam();
 	}
 
 	void mandarInstPraRam() {
 		byte b[] = new byte[tamanhoInstrucoes];
-
+		int contAux = 1;
 		for (int i = 1; i <= Constantes.QTDE_INST_BUFFER; i++) {
 			b = new byte[tamanhoInstrucoes];
-			System.out.println("$$$$ Mandando dado " + i + " pro Barramento.");
 			if (bufferCIE == buffer.length) {
 				bufferCIE = 0;
 			}
@@ -142,13 +145,17 @@ public class ES extends Thread {
 				buffer[j] = -1;
 			}
 
-			Dado dado = new Dado(Constantes.id_ES, Constantes.id_RAM, b);
-			barramento.Enfileirar(dado);
+			if (b[0] != -1 || b[1] != -1) {
+				System.out.println("$$$$ Mandando dado " + contAux++ + " pro Barramento.");
+				Sinal sinal = new Sinal(Constantes.id_ES, Constantes.id_RAM, Constantes.id_SINAL_ESC);
+				Dado dado = new Dado(Constantes.id_ES, Constantes.id_RAM, Constantes.id_DADO_DADO, b);
+				Endereco endereco = new Endereco(Constantes.id_ES, Constantes.id_RAM, Constantes.id_END_MEM, 1);
+				barramento.Enfileirar(sinal, dado, endereco);
+			}
 
 			bufferCIE += tamanhoInstrucoes;
 		}
 		bufferCIE = 0;
-
 	}
 
 	void inicializarBuffer() {
@@ -182,5 +189,13 @@ public class ES extends Thread {
 	public String toString() {
 		return "ES [buffer=" + Arrays.toString(buffer) + "]";
 	}
+
+	// public void inicializarControladorRajadas() {
+	// int rajadasE = encoder.instrucoesCodificadas.size() /
+	// Constantes.QTDE_INST_BUFFER;
+	// int rajadasD = encoder.instrucoesCodificadas.size() %
+	// Constantes.QTDE_INST_BUFFER;
+	// System.out.println(rajadasE + " " + rajadasD);
+	// }
 
 }

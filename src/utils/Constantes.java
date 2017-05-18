@@ -20,14 +20,14 @@ public class Constantes {
 	public static int id_END_MEM = 6;
 	public static int id_END_VAZIO = -1;
 
-	
 	public static int SIZE_word = 16; // em bits
 	public static int SIZE_ram = 8;
 	public static int SIZE_e_s_buffer;
 	public static int TAM_MAX_INST;
 	public static int QTDE_ESP_INST;
-	public static int QTDE_INST_BUFFER = 10;
-
+	public static int QTDE_INST_BUFFER = 3;
+	
+	
 	private static void setSizeBuffer() {
 		int qtde_esp_por_palavra = SIZE_word / 8;
 		QTDE_ESP_INST = qtde_esp_por_palavra * TAM_MAX_INST;

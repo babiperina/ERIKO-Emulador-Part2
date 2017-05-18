@@ -15,19 +15,15 @@ public class Barramento extends Thread {
 	public ConcurrentLinkedQueue<Endereco> enderecos = new ConcurrentLinkedQueue<>();
 	public ConcurrentLinkedQueue<Sinal> sinais = new ConcurrentLinkedQueue<>();
 
-	public boolean Enfileirar(Object conteudo) {
-		if (conteudo instanceof Dado) {
-			dados.add((Dado) conteudo);
-			return true;
-		} else if (conteudo instanceof Endereco) {
-			enderecos.add((Endereco) conteudo);
-			return true;
-		} else if (conteudo instanceof Sinal) {
-			sinais.add((Sinal) conteudo);
+	public boolean Enfileirar(Sinal sinal, Dado dado, Endereco endereco) {
+
+		if (sinal != null && dado != null && endereco != null) {
+			sinais.add(sinal);
+			dados.add(dado);
+			enderecos.add(endereco);
 			return true;
 		}
 		return false;
-
 	}
 
 	private boolean enviarDado() {
@@ -52,18 +48,20 @@ public class Barramento extends Thread {
 
 	private boolean enviarSinal() {
 		if (sinais.size() > 0) {
-			 Sinal s = sinais.peek();
-			 if(s.getRemetente() == Constantes.id_ES && s.getDestinatario() == Constantes.id_RAM){
-				if(s.getTipo() == Constantes.id_SINAL_ESC){
+			Sinal s = sinais.peek();
+			if (s.getRemetente() == Constantes.id_ES && s.getDestinatario() == Constantes.id_RAM) {
+				if (s.getTipo() == Constantes.id_SINAL_ESC) {
 					System.out.println(s);
 					Computador.ram.enviarRespostaES();
 				}
-			 } else if(s.getRemetente() == Constantes.id_RAM && s.getDestinatario() == Constantes.id_ES){
-				 if(s.getTipo() == Constantes.id_SINAL_OK){
-					 Computador.es.mandarInstPraRam();
-				 }
-			 }
-			 sinais.poll();
+			} else if (s.getRemetente() == Constantes.id_RAM && s.getDestinatario() == Constantes.id_ES) {
+				if (s.getTipo() == Constantes.id_SINAL_OK) {
+					Computador.es.mandarInstPraRam();
+				} else if (s.getTipo() == Constantes.id_SINAL_ERROR) {
+
+				}
+			}
+			sinais.poll();
 			return true;
 		}
 		return false;
@@ -72,15 +70,43 @@ public class Barramento extends Thread {
 	@Override
 	public void run() {
 
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// try {
+		// Thread.sleep(1000);
+		// } catch (InterruptedException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 		System.out.println("***************************************");
+		if (dados.size() > 0) {
+			if (dados.peek().getTipo() == -1) {
+				System.out.println("R: " + dados.peek().getRemetente() + " D: " + dados.peek().getDestinatario() + " Tipo: VAZIO");
+			} else {
+				System.out.println("R: " + dados.peek().getRemetente() + " D: " + dados.peek().getDestinatario() + " Tipo: "
+						+ dados.peek().getTipo());				
+			}
+		}
 		System.out.println(dados.size() + "--------- Enviando um dado : " + enviarDado() + " ---------");
+
+		if (enderecos.size() > 0) {
+			if (enderecos.peek().getTipo() == -1) {
+				System.out.println("R: " + enderecos.peek().getRemetente() + " D: " + enderecos.peek().getDestinatario()
+						+ " Tipo: VAZIO");	
+			} else {
+				System.out.println("R: " + enderecos.peek().getRemetente() + " D: " + enderecos.peek().getDestinatario()
+						+ " Tipo: " + enderecos.peek().getTipo());				
+			}
+		}
 		System.out.println(enderecos.size() + "--------- Enviando um endereço : " + enviarEndereco() + " ---------");
+
+		if (sinais.size() > 0) {
+			if (sinais.peek().getTipo() == -1) {
+				System.out.println("R: " + sinais.peek().getRemetente() + " D: " + sinais.peek().getDestinatario()
+						+ " Tipo: VAZIO");
+			} else {
+				System.out.println("R: " + sinais.peek().getRemetente() + " D: " + sinais.peek().getDestinatario()
+						+ " Tipo: " + sinais.peek().getTipo());
+			}
+		}
 		System.out.println(sinais.size() + "--------- Enviando um sinal : " + enviarSinal() + " ---------");
 
 		super.run();

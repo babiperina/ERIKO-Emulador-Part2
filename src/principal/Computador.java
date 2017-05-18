@@ -23,6 +23,7 @@ public class Computador {
 		System.out.println("Tamanho da palavra: " + Constantes.SIZE_word);
 		parser.run();
 		encoder.run();
+//		es.inicializarControladorRajadas();
 		System.out.println(es.toString());
 		while (ligado) {
 			barramento.run();
