@@ -51,7 +51,6 @@ public class Barramento extends Thread {
 			Sinal s = sinais.peek();
 			if (s.getRemetente() == Constantes.id_ES && s.getDestinatario() == Constantes.id_RAM) {
 				if (s.getTipo() == Constantes.id_SINAL_ESC) {
-					System.out.println(s);
 					Computador.ram.enviarRespostaES();
 				}
 			} else if (s.getRemetente() == Constantes.id_RAM && s.getDestinatario() == Constantes.id_ES) {
@@ -70,46 +69,55 @@ public class Barramento extends Thread {
 	@Override
 	public void run() {
 
-		// try {
-		// Thread.sleep(1000);
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		System.out.println("***************************************");
-		if (dados.size() > 0) {
-			if (dados.peek().getTipo() == -1) {
-				System.out.println("R: " + dados.peek().getRemetente() + " D: " + dados.peek().getDestinatario() + " Tipo: VAZIO");
+		if (dados.peek() != null) {
+			if (dados.peek().getTipo() == -1 && enderecos.peek().getTipo() == -1 && sinais.peek().getTipo() == -1) {
+				enviarDado();
+				enviarEndereco();
+				enviarSinal();
 			} else {
-				System.out.println("R: " + dados.peek().getRemetente() + " D: " + dados.peek().getDestinatario() + " Tipo: "
-						+ dados.peek().getTipo());				
-			}
-		}
-		System.out.println(dados.size() + "--------- Enviando um dado : " + enviarDado() + " ---------");
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+				System.out.println("***************************************");
+				if (dados.size() > 0) {
+					if (dados.peek().getTipo() == -1) {
+						System.out.println("R: " + dados.peek().getRemetente() + " D: " + dados.peek().getDestinatario()
+								+ " Tipo: VAZIO");
+					} else {
+						System.out.println("R: " + dados.peek().getRemetente() + " D: " + dados.peek().getDestinatario()
+								+ " Tipo: " + dados.peek().getTipo());
+					}
+				}
+				System.out.println(dados.size() + "--------- Enviando um dado : " + enviarDado() + " ---------");
 
-		if (enderecos.size() > 0) {
-			if (enderecos.peek().getTipo() == -1) {
-				System.out.println("R: " + enderecos.peek().getRemetente() + " D: " + enderecos.peek().getDestinatario()
-						+ " Tipo: VAZIO");	
-			} else {
-				System.out.println("R: " + enderecos.peek().getRemetente() + " D: " + enderecos.peek().getDestinatario()
-						+ " Tipo: " + enderecos.peek().getTipo());				
-			}
-		}
-		System.out.println(enderecos.size() + "--------- Enviando um endereço : " + enviarEndereco() + " ---------");
+				if (enderecos.size() > 0) {
+					if (enderecos.peek().getTipo() == -1) {
+						System.out.println("R: " + enderecos.peek().getRemetente() + " D: "
+								+ enderecos.peek().getDestinatario() + " Tipo: VAZIO");
+					} else {
+						System.out.println("R: " + enderecos.peek().getRemetente() + " D: "
+								+ enderecos.peek().getDestinatario() + " Tipo: " + enderecos.peek().getTipo());
+					}
+				}
+				System.out.println(
+						enderecos.size() + "--------- Enviando um endereço : " + enviarEndereco() + " ---------");
 
-		if (sinais.size() > 0) {
-			if (sinais.peek().getTipo() == -1) {
-				System.out.println("R: " + sinais.peek().getRemetente() + " D: " + sinais.peek().getDestinatario()
-						+ " Tipo: VAZIO");
-			} else {
-				System.out.println("R: " + sinais.peek().getRemetente() + " D: " + sinais.peek().getDestinatario()
-						+ " Tipo: " + sinais.peek().getTipo());
+				if (sinais.size() > 0) {
+					if (sinais.peek().getTipo() == -1) {
+						System.out.println("R: " + sinais.peek().getRemetente() + " D: "
+								+ sinais.peek().getDestinatario() + " Tipo: VAZIO");
+					} else {
+						System.out.println("R: " + sinais.peek().getRemetente() + " D: "
+								+ sinais.peek().getDestinatario() + " Tipo: " + sinais.peek().getTipo());
+					}
+				}
+				System.out.println(sinais.size() + "--------- Enviando um sinal : " + enviarSinal() + " ---------");
 			}
+			super.run();
 		}
-		System.out.println(sinais.size() + "--------- Enviando um sinal : " + enviarSinal() + " ---------");
-
-		super.run();
 	}
 
 }

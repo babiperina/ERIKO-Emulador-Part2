@@ -190,12 +190,4 @@ public class ES extends Thread {
 		return "ES [buffer=" + Arrays.toString(buffer) + "]";
 	}
 
-	// public void inicializarControladorRajadas() {
-	// int rajadasE = encoder.instrucoesCodificadas.size() /
-	// Constantes.QTDE_INST_BUFFER;
-	// int rajadasD = encoder.instrucoesCodificadas.size() %
-	// Constantes.QTDE_INST_BUFFER;
-	// System.out.println(rajadasE + " " + rajadasD);
-	// }
-
 }
