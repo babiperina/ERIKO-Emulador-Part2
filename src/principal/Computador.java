@@ -21,9 +21,9 @@ public class Computador {
 	public static void main(String[] args) {
 
 		System.out.println("Tamanho da palavra: " + Constantes.SIZE_word);
+		System.out.println("ram: " + ram.getRam().length + " offset: " + ram.getOffset());
 		parser.run();
 		encoder.run();
-//		es.inicializarControladorRajadas();
 		System.out.println(es.toString());
 		while (ligado) {
 			barramento.run();

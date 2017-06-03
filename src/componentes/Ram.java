@@ -11,9 +11,28 @@ import utils.Sinal;
 public class Ram extends Thread {
 
 	Barramento barramento;
+	private byte[] ram = new byte[Constantes.SIZE_ram * 1000];
+	private int offset;
+
+	public byte[] getRam() {
+		return ram;
+	}
+
+	public void setRam(byte[] ram) {
+		this.ram = ram;
+	}
 
 	public Ram() {
 		barramento = Computador.barramento;
+		offset = Constantes.QTDE_ESP_INST*Constantes.QTDE_INST_BUFFER;
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
 	}
 
 	@Override

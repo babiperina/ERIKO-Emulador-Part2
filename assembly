@@ -1,20 +1,8 @@
-mov A, 25
-add B, 3
-mov 0x2, A
-add A, 5
+imul 0x1, 0x1, 0x1
+mov A, 2
+mov B, 3
+mov C, A
+mov 0x01, C
+add A, B
+add A, 1
 inc A
-mov 0x4, 0xf
-imul 0x5, 0x2, 0x4
-imul A, 2, 0x4
-mov B, 35
-inc B
-mov A, 25
-add B, 3
-mov 0x2, A
-add A, 5
-mov B, 35
-inc B
-mov A, 25
-add B, 3
-mov 0x2, A
-add A, 5

@@ -5,18 +5,12 @@ import principal.Computador;
 public class CPU extends Thread {
 	
 	private Barramento barramento;
+	// Registradores
+	// Cache
+	
 	
 	public CPU() {
 		setBarramento(Computador.barramento);
-	}
-
-	public void enviarSinal() {
-//		int remetente = Constantes.id_CPU;
-//		int destinatario = Constantes.id_RAM;
-//		int tipo = Constantes.id_SINAL_LER;
-
-//		Sinal sinal = new Sinal(remetente, destinatario, tipo);
-//		Computador.barramento.Enfileirar(sinal);
 	}
 
 	@Override
@@ -30,7 +24,19 @@ public class CPU extends Thread {
 //		enviarSinal();
 		super.run();
 	}
-
+	
+	public void buscar(){
+		
+	}
+	
+	public void decodificar(){
+		
+	}
+	
+	public void realizar(){
+		
+	}
+	
 	public Barramento getBarramento() {
 		return barramento;
 	}

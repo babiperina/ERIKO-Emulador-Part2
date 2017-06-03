@@ -21,20 +21,22 @@ public class Constantes {
 	public static int id_END_VAZIO = -1;
 
 	public static int SIZE_word = 16; // em bits
-	public static int SIZE_ram = 8;
+	public static int SIZE_ram = 16; //em kb
+//	public static int SIZE_ram = 32; //em kb
+//	public static int SIZE_ram = 64; //em kb
+//	public static int SIZE_ram = 128; //em kb
 	public static int SIZE_e_s_buffer;
 	public static int TAM_MAX_INST;
 	public static int QTDE_ESP_INST;
-	public static int QTDE_INST_BUFFER = 3;
+	public static int QTDE_INST_BUFFER = 5;
 	
 	
 	private static void setSizeBuffer() {
-		int qtde_esp_por_palavra = SIZE_word / 8;
-		QTDE_ESP_INST = qtde_esp_por_palavra * TAM_MAX_INST;
+		QTDE_ESP_INST = TAM_MAX_INST;
 		SIZE_e_s_buffer = QTDE_ESP_INST * QTDE_INST_BUFFER;
 	}
 
-	public static int WIDTH_barramento = 8; // bits
+	public static int WIDTH_barramento = 16; // bits
 	public static String limitMemoryDigits;
 
 	public static void setTamanhoMaxInstrucao() {
@@ -51,7 +53,7 @@ public class Constantes {
 			break;
 
 		default:
-			System.err.println("Tamanho de largura de barramento inv√°lido.");
+			System.err.println("Tamanho de largura de barramento inv·lido.");
 			System.exit(0);
 			break;
 		}
@@ -134,16 +136,16 @@ public class Constantes {
 		RE_imul = "^(imul)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]"
 				+ limitMemoryDigits + "|\\d+)\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
 		System.out.println(RE_add_mov + "\n" + RE_inc + "\n" + RE_imul);
-		System.out.println("LB: " + WIDTH_barramento + " TP: " + SIZE_word + " TAM_MAX_INST: " + TAM_MAX_INST);
+		System.out.println("LB: " + WIDTH_barramento + " TP: " + SIZE_word + " TAM_MAX_INST: " + TAM_MAX_INST + " QTDE_ESP_INST: " + QTDE_ESP_INST);
 		switch (SIZE_word) {
 		case 16:
-			System.out.println("$$$$ Palavra dever√° ser SHORT.");
+			System.out.println("$$$$ Palavra dever· ser SHORT.");
 			break;
 		case 32:
-			System.out.println("$$$$ Palavra dever√° ser INT.");
+			System.out.println("$$$$ Palavra dever· ser INT.");
 			break;
 		case 64:
-			System.out.println("$$$$ Palavra dever√° ser LONG.");
+			System.out.println("$$$$ Palavra dever· ser LONG.");
 			break;
 
 		default:
