@@ -6,9 +6,8 @@ import componentes.ES;
 import componentes.Encoder;
 import componentes.Parser;
 import componentes.Ram;
-import utils.Constantes;
 
-public class Computador {
+public class Computador extends Thread {
 
 	private static Parser parser = new Parser();
 	public static Encoder encoder = new Encoder();
@@ -16,27 +15,36 @@ public class Computador {
 	public static CPU cpu = new CPU();
 	public static Ram ram = new Ram();
 	public static ES es = new ES();
-	public static boolean ligado = true;
-
-	public static void main(String[] args) {
-
-		parser.run();
-		encoder.run();
-		for (int i = 0; i < 50; i++) {
-			System.out.println();
-		}
-		while (ligado) {
-			barramento.run();
-			es.run();
-			cpu.run();
-			ram.run();
+	public static Tela tela = new Tela();
+	private boolean rodando = false;
+	
+	public void run() {
+		while (rodando) {
 			if (encoder.todasInstrucoesNaES() && es.bufferVazio() && barramento.dados.isEmpty()) {
-				ligado = false;
+				parar();
 			}
+			encoder.mostrarInstrucoesCodificadas(); // teste
 		}
-		encoder.mostrarInstrucoesCodificadas(); // teste
-		// System.out.println(es.toString()); // teste
-
 	}
 
+	public void parar() {
+		barramento.parar();
+		es.parar();
+		cpu.parar();
+		ram.parar();
+	}
+
+	public void iniciar() {
+		rodando = true;
+	}
+
+	public void init() {
+		parser.run();
+		encoder.run();
+		barramento.start();
+		es.start();
+		cpu.start();
+		ram.start();
+		iniciar();
+	}
 }

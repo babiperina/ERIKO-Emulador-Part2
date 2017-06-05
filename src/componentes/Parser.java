@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import principal.Computador;
+import principal.Tela;
 import utils.Constantes;
 
 public class Parser {
@@ -19,27 +20,27 @@ public class Parser {
 	public Parser() {
 		lerArquivoComInstrucoes();
 	}
-	
-	public void run(){
+
+	public void run() {
 		mostrarInstrucoes();
 		passarInstrucoesProEncoder();
 	}
 
 	public void passarInstrucoesProEncoder() {
-		System.out.println("$$$$ InformaÃ§Ãµes sendo passadas do parser para o encoder.");
+		Computador.tela.escreverNoConsole("$$$$ Informações sendo passadas do parser para o encoder.");
 		Computador.encoder.instrucoes = instrucoes;
 		instrucoes = new ArrayList<>();
 	}
 
 	public void mostrarInstrucoes() {
 		if (instrucoes.size() == 0)
-			System.out.println("$$$$ NÃ£o hÃ¡ instruÃ§Ãµes no parser.");
+			Computador.tela.escreverNoConsole("$$$$ Não há instruções no parser.");
 		else
-			System.out.println("$$$$ InstruÃ§Ãµes no parser:");
+			Computador.tela.escreverNoConsole("$$$$ Instruções no parser:");
 
 		int cont = 1;
 		for (String instrucao : instrucoes) {
-			System.out.println(cont++ + " - " + instrucao);
+			Computador.tela.escreverNoConsole(cont++ + " - " + instrucao);
 		}
 	}
 

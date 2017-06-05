@@ -15,6 +15,7 @@ public class ES extends Thread {
 	byte[] buffer = new byte[Constantes.SIZE_e_s_buffer];
 	Barramento barramento;
 	Encoder encoder;
+	boolean rodando = true;
 	boolean prontoPraIrPraRAM = false;
 	private int tamanhoInstrucoes;
 
@@ -35,10 +36,18 @@ public class ES extends Thread {
 
 	@Override
 	public void run() {
-		// System.out.println("CI Escrita: " + bufferCIE); // teste
-		// System.out.println("Tamanho buffer: " + buffer.length); // teste
-		puxarInstrucaoDoEncoder();
-		// System.out.println(toString()); // buffer print teste
+		while (rodando) {
+			try {
+				sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// System.out.println("CI Escrita: " + bufferCIE); // teste
+			// System.out.println("Tamanho buffer: " + buffer.length); // teste
+			puxarInstrucaoDoEncoder();
+			// System.out.println(toString()); // buffer print teste
+		}
 		super.run();
 	}
 
@@ -192,7 +201,7 @@ public class ES extends Thread {
 
 	@Override
 	public String toString() {
-		return "ES [buffer=" + Arrays.toString(buffer) + "]";
+		return "Módulo Entrada e Saída\n  buffer= " + Arrays.toString(buffer);
 	}
 
 	public boolean mandarInstrucaoPraRam(Endereco e) {
@@ -203,11 +212,16 @@ public class ES extends Thread {
 			prontoPraIrPraRAM = false;
 			Computador.barramento.Enfileirar(sinal, dado, endereco);
 			bufferCIE = -1;
+			inicializarBuffer();
 			return true;
 		} else {
 			return false;
 		}
 
+	}
+	
+	public void parar(){
+		rodando = false;
 	}
 
 }

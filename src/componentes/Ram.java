@@ -13,6 +13,7 @@ public class Ram extends Thread {
 	Barramento barramento;
 	private byte[] ram = new byte[Constantes.SIZE_ram * 1000];
 	private int offset;
+	private boolean rodando = true;
 
 	public byte[] getRam() {
 		return ram;
@@ -36,14 +37,16 @@ public class Ram extends Thread {
 	}
 
 	@Override
-	public synchronized void start() {
-		// TODO Auto-generated method stub
-		super.start();
-	}
-
-	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		while (rodando) {
+			System.out.println("RAM rodando");
+			try {
+				sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		super.run();
 	}
 
@@ -93,4 +96,7 @@ public class Ram extends Thread {
 		}
 	}
 
+	public void parar() {
+		rodando = false;
+	}
 }

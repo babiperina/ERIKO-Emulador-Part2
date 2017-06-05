@@ -15,6 +15,7 @@ public class Barramento extends Thread {
 	// quebrar em 3 estruturas de dados
 	public ConcurrentLinkedQueue<Endereco> enderecos = new ConcurrentLinkedQueue<>();
 	public ConcurrentLinkedQueue<Sinal> sinais = new ConcurrentLinkedQueue<>();
+	private boolean rodando = true;
 
 	public boolean Enfileirar(Sinal sinal, Dado dado, Endereco endereco) {
 		if (sinal != null && dado != null && endereco != null) {
@@ -85,14 +86,18 @@ public class Barramento extends Thread {
 	@Override
 	public void run() {
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while (rodando) {
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(enviar());
 		}
-		System.out.println(enviar());
-
 	}
 
+	public void parar() {
+		rodando = false;
+	}
 }

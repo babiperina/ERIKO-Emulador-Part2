@@ -1,9 +1,11 @@
 package componentes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import principal.Computador;
 import utils.Constantes;
 import utils.InstrucaoCodificada;
 
@@ -43,20 +45,21 @@ public class Encoder {
 		InstrucaoCodificada codificada;
 		long[] code;
 		int cont = 1;
-		System.out.println("$$$$ InstruÃ§Ã£o sendo codificada no encoder: ");
+		Computador.tela.escreverNoConsole("$$$$ Instrução sendo codificada no encoder: ");
 		while (instrucoes.size() != 0) {
 
 			instrucaoAtual = instrucoes.get(0);
 
 			if (cont == 1)
-				System.out.println("$$$$ CodificaÃ§Ã£o para LONG das instruÃ§Ãµes:");
+				Computador.tela.escreverNoConsole("$$$$ Codificação para LONG das instruções:");
 			code = encoderInstrucaoToLong(instrucaoAtual);
+			String texto = "";
 			for (int i = 0; i < code.length; i++) {
 				if (i == 0)
-					System.out.print(cont++ + " - ");
-				System.out.print(code[i] + " ");
+					texto = cont++ + " - ";
+				texto += code[i] + " ";
 			}
-			System.out.println();
+			Computador.tela.escreverNoConsole(texto);
 
 			codificada = new InstrucaoCodificada(
 					transformarDeLongProCodigoFinal(code, Constantes.SIZE_word, Constantes.WIDTH_barramento));
@@ -357,25 +360,25 @@ public class Encoder {
 
 	public void mostrarInstrucoesCodificadas() {
 		if (instrucoesCodificadas.size() == 0)
-			System.out.println("$$$$ NÃ£o hÃ¡ instruÃ§Ãµes codificadas no encoder.");
+			Computador.tela.escreverNoConsole("$$$$ Não há instruções codificadas no encoder.");
 		else
-			System.out.println("$$$$ InstruÃ§Ãµes codificadas para LONG/INT/SHORT no encoder:");
+			Computador.tela.escreverNoConsole("$$$$ Instruções codificadas para LONG/INT/SHORT no encoder:");
 
 		int cont = 1;
 		for (InstrucaoCodificada instrucao : instrucoesCodificadas) {
-			System.out.println(cont++ + " - " + instrucao);
+			Computador.tela.escreverNoConsole(cont++ + " - " + instrucao);
 		}
 	}
 
 	public void mostrarInstrucoes() {
 		if (instrucoes.size() == 0)
-			System.out.println("$$$$ NÃ£o hÃ¡ instruÃ§Ãµes no encoder.");
+			Computador.tela.escreverNoConsole("$$$$ Não há instruções no encoder.");
 		else
-			System.out.println("$$$$ InstruÃ§Ãµes no encoder:");
+			Computador.tela.escreverNoConsole("$$$$ Instruções no encoder:");
 
 		int cont = 1;
 		for (String instrucao : instrucoes) {
-			System.out.println(cont++ + " - " + instrucao);
+			Computador.tela.escreverNoConsole(cont++ + " - " + instrucao);
 		}
 	}
 
@@ -609,6 +612,12 @@ public class Encoder {
 
 	long encoderMemory(String memory) {
 		return Long.parseLong(memory.substring(2), 16);
+	}
+
+	@Override
+	public String toString() {
+		return "Encoder \n  codes= " + Arrays.toString(codes) + ";\n  instrucoes= " + instrucoes
+				+ ";\n  instrucoesCodificadas= " + instrucoesCodificadas;
 	}
 
 }

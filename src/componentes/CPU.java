@@ -12,6 +12,7 @@ public class CPU extends Thread {
 	private Registrador D = new Registrador(Constantes.VALUE_register_D, "D", null);
 	private Registrador CI = new Registrador(Constantes.VALUE_register_CI, "CI", 0);
 	private Cache cache;
+	private boolean rodando = true;
 	// Registradores
 	// Cache
 	
@@ -19,17 +20,18 @@ public class CPU extends Thread {
 	public CPU() {
 		setBarramento(Computador.barramento);
 	}
-
-	@Override
-	public synchronized void start() {
-		// TODO Auto-generated method stub
-		super.start();
-	}
-
+	
 	@Override
 	public void run() {
-		
-		
+		while(rodando){
+			System.out.println("CPU Rodando");
+			try {
+				sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		super.run();
 	}
 	
@@ -91,6 +93,11 @@ public class CPU extends Thread {
 
 	public void setCI(Registrador cI) {
 		CI = cI;
+	}
+	
+	public void parar() {
+		rodando = false;
+		
 	}
 	
 }

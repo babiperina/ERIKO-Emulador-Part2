@@ -137,22 +137,22 @@ public class Constantes {
 				+ limitMemoryDigits + "|\\d+)\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
 //		System.out.println(RE_add_mov + "\n" + RE_inc + "\n" + RE_imul);
 //		System.out.println("LB: " + WIDTH_barramento + " TP: " + SIZE_word + " TAM_MAX_INST: " + TAM_MAX_INST + " QTDE_ESP_INST: " + QTDE_ESP_INST);
-		switch (SIZE_word) {
-		case 16:
-			System.out.println("$$$$ Palavra deverá ser SHORT.");
-			break;
-		case 32:
-			System.out.println("$$$$ Palavra deverá ser INT.");
-			break;
-		case 64:
-			System.out.println("$$$$ Palavra deverá ser LONG.");
-			break;
-
-		default:
-			System.err.println("Erro no tamanho da palavra.");
-			System.exit(0);
-			break;
-		}
+//		switch (SIZE_word) {
+//		case 16:
+//			System.out.println("$$$$ Palavra deverá ser SHORT.");
+//			break;
+//		case 32:
+//			System.out.println("$$$$ Palavra deverá ser INT.");
+//			break;
+//		case 64:
+//			System.out.println("$$$$ Palavra deverá ser LONG.");
+//			break;
+//
+//		default:
+//			System.err.println("Erro no tamanho da palavra.");
+//			System.exit(0);
+//			break;
+//		}
 	}
 
 }
