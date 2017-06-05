@@ -17,7 +17,6 @@ public class Barramento extends Thread {
 	public ConcurrentLinkedQueue<Sinal> sinais = new ConcurrentLinkedQueue<>();
 
 	public boolean Enfileirar(Sinal sinal, Dado dado, Endereco endereco) {
-
 		if (sinal != null && dado != null && endereco != null) {
 			sinais.add(sinal);
 			dados.add(dado);
@@ -48,85 +47,52 @@ public class Barramento extends Thread {
 	// }
 
 	private boolean enviar() {
-		if (sinais.size() > 0) {
+		boolean remover = false;
+		if (!dados.isEmpty()) {
 			Sinal s = sinais.peek();
-			Dado d = dados.peek();
 			Endereco e = enderecos.peek();
-			if (s.getRemetente() == Constantes.id_ES && s.getDestinatario() == Constantes.id_RAM) {
-				if (s.getTipo() == Constantes.id_SINAL_ESC) {
-					if (e.getTipo() == Constantes.id_END_VAZIO) {
-						Computador.ram.enviarRespostaES();
-					} else {
+			Dado d = dados.peek();
 
+			if (s.getDestinatario() == Constantes.id_RAM) {
+				if (s.getRemetente() == Constantes.id_ES) {
+					if (e.getTipo() == Constantes.id_END_VAZIO) {
+						System.out.println("Barramento 1");
+						remover = Computador.ram.verificarDisponibilidade();
+					} else {
+						System.out.println("Barramento 2");
+						Computador.ram.colocarInstrucaoNaRam(e, d);
+						remover = true;
 					}
 				}
-			} else if (s.getRemetente() == Constantes.id_RAM && s.getDestinatario() == Constantes.id_ES) {
-				if (s.getTipo() == Constantes.id_SINAL_OK) {
-					Computador.es.mandarInstPraRam();
-				} else if (s.getTipo() == Constantes.id_SINAL_ERROR) {
-
+			} else if (s.getDestinatario() == Constantes.id_ES) {
+				if (s.getRemetente() == Constantes.id_RAM) {
+					System.out.println("Barramento 3");
+					remover = Computador.es.mandarInstrucaoPraRam(e);
 				}
 			}
+		}
+
+		if (remover) {
 			sinais.poll();
 			dados.poll();
-			enderecos.peek();
+			enderecos.poll();
 			return true;
-		}
-		return false;
+		} else
+			return false;
+
 	}
 
 	@Override
 	public void run() {
 
-		if (dados.peek() != null) {
-			if (dados.peek().getTipo() == -1 && enderecos.peek().getTipo() == -1 && sinais.peek().getTipo() == -1) {
-				// enviarDado();
-				// enviarEndereco();
-				enviar();
-			} else {
-				// try {
-				// Thread.sleep(1000);
-				// } catch (InterruptedException e) {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
-				System.out.println("***************************************");
-				if (dados.size() > 0) {
-					if (dados.peek().getTipo() == -1) {
-						System.out.println("R: " + dados.peek().getRemetente() + " D: " + dados.peek().getDestinatario()
-								+ " Tipo: VAZIO");
-					} else {
-						System.out.println("R: " + dados.peek().getRemetente() + " D: " + dados.peek().getDestinatario()
-								+ " Tipo: " + dados.peek().getTipo());
-					}
-				}
-				System.out.println(dados.size() + "--------- Enviando um dado  ---------");
-
-				if (enderecos.size() > 0) {
-					if (enderecos.peek().getTipo() == -1) {
-						System.out.println("R: " + enderecos.peek().getRemetente() + " D: "
-								+ enderecos.peek().getDestinatario() + " Tipo: VAZIO");
-					} else {
-						System.out.println("R: " + enderecos.peek().getRemetente() + " D: "
-								+ enderecos.peek().getDestinatario() + " Tipo: " + enderecos.peek().getTipo());
-					}
-				}
-				System.out.println(enderecos.size() + "--------- Enviando um endereço  ---------");
-
-				if (sinais.size() > 0) {
-					if (sinais.peek().getTipo() == -1) {
-						System.out.println("R: " + sinais.peek().getRemetente() + " D: "
-								+ sinais.peek().getDestinatario() + " Tipo: VAZIO");
-					} else {
-						System.out.println("R: " + sinais.peek().getRemetente() + " D: "
-								+ sinais.peek().getDestinatario() + " Tipo: " + sinais.peek().getTipo());
-					}
-				}
-				System.out.println(sinais.size() + "--------- Enviando um sinal  ---------");
-				enviar();
-			}
-			super.run();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		System.out.println(enviar());
+
 	}
 
 }

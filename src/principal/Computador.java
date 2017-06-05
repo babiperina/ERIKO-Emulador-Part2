@@ -20,11 +20,11 @@ public class Computador {
 
 	public static void main(String[] args) {
 
-		System.out.println("Tamanho da palavra: " + Constantes.SIZE_word);
-		System.out.println("ram: " + ram.getRam().length + " offset: " + ram.getOffset());
 		parser.run();
 		encoder.run();
-		System.out.println(es.toString());
+		for (int i = 0; i < 50; i++) {
+			System.out.println();
+		}
 		while (ligado) {
 			barramento.run();
 			es.run();
@@ -34,9 +34,8 @@ public class Computador {
 				ligado = false;
 			}
 		}
-		System.out.println(barramento.dados.size());
 		encoder.mostrarInstrucoesCodificadas(); // teste
-		System.out.println(es.toString()); // teste
+		// System.out.println(es.toString()); // teste
 
 	}
 

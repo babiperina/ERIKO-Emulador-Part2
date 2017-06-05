@@ -28,7 +28,7 @@ public class Constantes {
 	public static int SIZE_e_s_buffer;
 	public static int TAM_MAX_INST;
 	public static int QTDE_ESP_INST;
-	public static int QTDE_INST_BUFFER = 5;
+	public static int QTDE_INST_BUFFER = 2;
 	
 	
 	private static void setSizeBuffer() {
@@ -135,8 +135,8 @@ public class Constantes {
 		RE_inc = "^(inc)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*$";
 		RE_imul = "^(imul)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]"
 				+ limitMemoryDigits + "|\\d+)\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
-		System.out.println(RE_add_mov + "\n" + RE_inc + "\n" + RE_imul);
-		System.out.println("LB: " + WIDTH_barramento + " TP: " + SIZE_word + " TAM_MAX_INST: " + TAM_MAX_INST + " QTDE_ESP_INST: " + QTDE_ESP_INST);
+//		System.out.println(RE_add_mov + "\n" + RE_inc + "\n" + RE_imul);
+//		System.out.println("LB: " + WIDTH_barramento + " TP: " + SIZE_word + " TAM_MAX_INST: " + TAM_MAX_INST + " QTDE_ESP_INST: " + QTDE_ESP_INST);
 		switch (SIZE_word) {
 		case 16:
 			System.out.println("$$$$ Palavra deverá ser SHORT.");

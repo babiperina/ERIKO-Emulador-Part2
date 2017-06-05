@@ -24,7 +24,7 @@ public class Ram extends Thread {
 
 	public Ram() {
 		barramento = Computador.barramento;
-		offset = Constantes.QTDE_ESP_INST*Constantes.QTDE_INST_BUFFER;
+		offset = Constantes.QTDE_ESP_INST * Constantes.QTDE_INST_BUFFER;
 	}
 
 	public int getOffset() {
@@ -48,20 +48,48 @@ public class Ram extends Thread {
 	}
 
 	public void enviarRespostaES() {
+		// Random gerador = new Random();
+		//
+		// int numero = gerador.nextInt(10);
+		// if (numero % 2 == 0) {
+		// Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_ES,
+		// Constantes.id_SINAL_OK);
+		// Dado dado = new Dado(Constantes.id_RAM, Constantes.id_ES,
+		// Constantes.id_DADO_VAZIO);
+		// Endereco endereco = new Endereco(Constantes.id_RAM, Constantes.id_ES,
+		// Constantes.id_END_MEM, 1);
+		// barramento.Enfileirar(sinal, dado, endereco);
+		// } else {
+		// Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_ES,
+		// Constantes.id_SINAL_ERROR);
+		// Dado dado = new Dado(Constantes.id_RAM, Constantes.id_ES,
+		// Constantes.id_DADO_VAZIO);
+		// Endereco endereco = new Endereco(Constantes.id_RAM, Constantes.id_ES,
+		// Constantes.id_END_VAZIO);
+		// barramento.Enfileirar(sinal, dado, endereco);
+		//
+		// }
+	}
+
+	public boolean verificarDisponibilidade() {
 		Random gerador = new Random();
 
 		int numero = gerador.nextInt(10);
+
 		if (numero % 2 == 0) {
 			Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_ES, Constantes.id_SINAL_OK);
-			Dado dado = new Dado(Constantes.id_RAM, Constantes.id_ES, Constantes.id_DADO_VAZIO);
-			Endereco endereco = new Endereco(Constantes.id_RAM, Constantes.id_ES, Constantes.id_END_MEM, 1);
+			Endereco endereco = new Endereco(Constantes.id_END_MEM, 0);
+			Dado dado = new Dado(Constantes.id_DADO_VAZIO);
 			barramento.Enfileirar(sinal, dado, endereco);
-		} else {
-			Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_ES, Constantes.id_SINAL_ERROR);
-			Dado dado = new Dado(Constantes.id_RAM, Constantes.id_ES, Constantes.id_DADO_VAZIO);
-			Endereco endereco = new Endereco(Constantes.id_RAM, Constantes.id_ES, Constantes.id_END_VAZIO);
-			barramento.Enfileirar(sinal, dado, endereco);
+			return true;
+		}
+		return false;
+	}
 
+	public void colocarInstrucaoNaRam(Endereco e, Dado d) {
+		int cont = 0;
+		for (int i = e.getEndereco(); i < offset; i++) {
+			ram[i] = d.getConteudo()[cont++];
 		}
 	}
 
