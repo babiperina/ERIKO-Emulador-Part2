@@ -39,9 +39,12 @@ public class Barramento extends Thread {
 					if (e.getTipo() == Constantes.id_END_VAZIO) {
 						remover = Computador.ram.verificarDisponibilidade();
 					} else {
-						System.out.println(Arrays.toString(d.getConteudo()));
 						remover = Computador.ram.colocarInstrucaoNaRam(e, d);
 
+					}
+				} else if (s.getRemetente() == Constantes.id_CPU) {
+					if (s.getTipo() == Constantes.id_SINAL_LER) {
+						Computador.ram.mandarInstrucaoPraCpu(e, d);
 					}
 				}
 			} else if (s.getDestinatario() == Constantes.id_ES) {
@@ -49,8 +52,6 @@ public class Barramento extends Thread {
 					remover = Computador.es.mandarInstrucaoPraRam(e);
 				}
 			}
-			System.out.println(sinais.get(0).toString());
-			System.out.println(enderecos.get(0).toString());
 		}
 		if (remover) {
 			sinais.remove(0);

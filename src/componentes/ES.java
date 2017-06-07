@@ -83,16 +83,15 @@ public class ES extends Thread {
 					}
 					bufferCIE = tamanhoInstrucoes;
 				}
-				Computador.tela.escreverNoConsole("$$$$ Instrução colocada no Buffer.(ES.java:88)");
+				Computador.tela.escreverNoConsole("$$$$ Instrução colocada no Buffer.(ES.java:86)");
 			} else if (bufferCIE == buffer.length) {
 				Computador.tela.escreverNoConsole(toString());
-				int qtdeDados = Constantes.QTDE_INST_BUFFER * (Constantes.TAM_MAX_INST * 2);
 				Sinal sinal = new Sinal(Constantes.id_ES, Constantes.id_RAM, Constantes.id_SINAL_ESC);
-				Dado dado = new Dado(Constantes.id_DADO_QTDE, qtdeDados);
+				Dado dado = new Dado(Constantes.id_DADO_QTDE, buffer.length);
 				Endereco endereco = new Endereco(Constantes.id_END_VAZIO);
-				System.out.println(Computador.barramento.Enfileirar(sinal, dado, endereco));
+				Computador.barramento.Enfileirar(sinal, dado, endereco);
 				prontoPraIrPraRAM = true;
-				Computador.tela.escreverNoConsole("$$$$ Instrução preparada para ir pra Ram. (ES.java:97)");
+				Computador.tela.escreverNoConsole("$$$$ Instrução preparada para ir pra Ram. (ES.java:94)");
 			} else {
 				if (buffer[bufferCIE] == -1) {
 					InstrucaoCodificada instructionIn = encoder.mandarInstrucoesParaModuloES();
@@ -137,6 +136,7 @@ public class ES extends Thread {
 	}
 
 	void inicializarBuffer() {
+		buffer = new byte[buffer.length];
 		for (int i = 0; i < buffer.length; i++) {
 			buffer[i] = -1;
 		}

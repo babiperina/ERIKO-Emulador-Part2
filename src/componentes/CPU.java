@@ -2,6 +2,9 @@ package componentes;
 
 import principal.Computador;
 import utils.Constantes;
+import utils.Dado;
+import utils.Endereco;
+import utils.Sinal;
 
 public class CPU extends Thread {
 	
@@ -10,7 +13,7 @@ public class CPU extends Thread {
 	private Registrador B = new Registrador(Constantes.VALUE_register_B, "B", null);
 	private Registrador C = new Registrador(Constantes.VALUE_register_C, "C", null);
 	private Registrador D = new Registrador(Constantes.VALUE_register_D, "D", null);
-	private Registrador CI = new Registrador(Constantes.VALUE_register_CI, "CI", 0);
+	private Registrador CI = new Registrador(Constantes.VALUE_register_CI, "CI", -1);
 	private Cache cache;
 	private boolean rodando = true;
 	// Registradores
@@ -27,6 +30,7 @@ public class CPU extends Thread {
 				Computador.tela.escreverNoConsole("CPU Rodando");
 				Computador.tela.toNaCpu(true);
 				sleep(1000);
+				buscar();
 				Computador.tela.toNaCpu(false);
 				sleep(1000);
 			} catch (InterruptedException e) {
@@ -38,7 +42,12 @@ public class CPU extends Thread {
 	}
 	
 	public void buscar(){
-		
+		if(CI.getConteudo()!=-1){
+		 Sinal sinal = new Sinal(Constantes.id_CPU, Constantes.id_RAM, Constantes.id_SINAL_LER);
+		 Dado dado = new Dado(Constantes.id_DADO_QTDE, Constantes.QTDE_ESP_INST);
+		 Endereco endereco = new Endereco(Constantes.id_END_MEM, CI.getConteudo());
+		 Computador.barramento.Enfileirar(sinal, dado, endereco);
+		}
 	}
 	
 	public void decodificar(){
@@ -81,12 +90,12 @@ public class CPU extends Thread {
 		D = d;
 	}
 
-	public Registrador getCI() {
-		return CI;
+	public int getCI() {
+		return CI.getConteudo();
 	}
 
-	public void setCI(Registrador cI) {
-		CI = cI;
+	public void setCI(int cI) {
+		CI.setConteudo(cI);
 	}
 	
 	public void parar() {

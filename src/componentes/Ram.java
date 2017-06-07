@@ -37,6 +37,7 @@ public class Ram extends Thread {
 	}
 
 	void inicializarRam() {
+		Computador.cpu.setCI(-1);
 		for (int i = 0; i < ram.length; i++) {
 			ram[i] = -1;
 		}
@@ -49,12 +50,7 @@ public class Ram extends Thread {
 				Computador.tela.escreverNoConsole("RAM rodando");
 				Computador.tela.toNaRam(true);
 				sleep(1000);
-				Random gerador = new Random();
 
-				int numero = gerador.nextInt(10);
-				if (numero % 2 == 0) {
-					inicializarRam();
-				}
 				Computador.tela.toNaRam(false);
 				sleep(1000);
 			} catch (InterruptedException e) {
@@ -67,7 +63,7 @@ public class Ram extends Thread {
 	}
 
 	public boolean verificarDisponibilidade() {
-		if (ram[0] == -1) {
+		if (ramVazia()) {// mudar ram inst vazia
 			Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_ES, Constantes.id_SINAL_OK);
 			Endereco endereco = new Endereco(Constantes.id_END_MEM, 0);
 			Dado dado = new Dado(Constantes.id_DADO_VAZIO);
@@ -83,14 +79,23 @@ public class Ram extends Thread {
 			for (int i = e.getEndereco(); i < d.getConteudo().length; i++) {
 				ram[i] = d.getConteudo()[cont++];
 			}
+			Computador.cpu.setCI(0);
 			return true;
 		}
 		return false;
 	}
 
+	boolean ramVazia() {
+		for (int i = 0; i < offset; i++) {
+			if (ram[i] != -1)
+				return false;
+		}
+		return true;
+	}
+
 	@Override
 	public String toString() {
-		return "Ram [ram=" + Arrays.toString(ram) + "]";
+		return "[Ram=" + Arrays.toString(ram) + "]";
 	}
 
 	public void parar() {
@@ -99,5 +104,10 @@ public class Ram extends Thread {
 
 	public void retornar() {
 		rodando = true;
+	}
+
+	public void mandarInstrucaoPraCpu(Endereco e, Dado d) {
+		// TODO Auto-generated method stub
+		
 	}
 }

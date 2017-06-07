@@ -24,6 +24,7 @@ public class Tela extends JFrame {
 
 	private JPanel contentPane;
 	static JTextArea console = new JTextArea();
+	static JTextArea areaComponente = new JTextArea();
 	static JButton btnCpu = new JButton("CPU");
 	public static Computador computador = new Computador();
 	JCheckBox chckbxAutoscroll = new JCheckBox("AutoScroll");
@@ -67,12 +68,9 @@ public class Tela extends JFrame {
 		lblConsole.setBounds(10, 11, 77, 14);
 		contentPane.add(lblConsole);
 
-		JTextArea areaComponente = new JTextArea();
-		areaComponente.setEditable(false);
-		areaComponente.setBounds(799, 130, 225, 339);
-		areaComponente.setLineWrap(true);
-		areaComponente.setWrapStyleWord(true);
-		contentPane.add(areaComponente);
+		JScrollPane scrollPaneAC = new JScrollPane(areaComponente);
+		scrollPaneAC.setBounds(799, 137, 225, 339);
+		contentPane.add(scrollPaneAC);
 
 		JButton btnParar = new JButton("Parar");
 		btnParar.setEnabled(false);
@@ -84,6 +82,11 @@ public class Tela extends JFrame {
 				btnParar.setEnabled(true);
 			}
 		});
+
+		areaComponente.setEditable(false);
+		areaComponente.setBounds(799, 137, 225, 23);
+		areaComponente.setLineWrap(true);
+		areaComponente.setWrapStyleWord(true);
 		btnIniciar.setBounds(518, 11, 89, 23);
 		contentPane.add(btnIniciar);
 
@@ -108,6 +111,7 @@ public class Tela extends JFrame {
 		btnRam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				areaComponente.setText(Computador.ram.toString());
+				areaComponente.setCaretPosition(0);
 			}
 		});
 		btnRam.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -192,7 +196,6 @@ public class Tela extends JFrame {
 
 	}
 
-	
 	public void toNaES(boolean to) {
 		if (to) {
 			panelEs.setBackground(new Color(102, 153, 255));
@@ -200,7 +203,7 @@ public class Tela extends JFrame {
 			panelEs.setBackground(new Color(240, 240, 240));
 		}
 	}
-	
+
 	public void toNoBarramento(boolean to) {
 		if (to) {
 			panelBar.setBackground(new Color(153, 255, 153));
