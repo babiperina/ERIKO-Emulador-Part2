@@ -6,12 +6,12 @@ public class Registrador {
 
 	private final String nome;
 
-	private Integer conteudo;
+	private Long conteudo;
 
-	public Registrador(int id, String nome, Integer conteudo) {
+	public Registrador(int id, String nome, long i) {
 		this.id = id;
 		this.nome = nome;
-		this.conteudo = conteudo;
+		this.conteudo = i;
 	}
 
 	public int getId() {
@@ -30,11 +30,11 @@ public class Registrador {
 		return conteudo == null;
 	}
 	
-	public int getConteudo() {
+	public long getConteudo() {
 		return conteudo;
 	}
 
-	public void setConteudo(int conteudo) {
+	public void setConteudo(long conteudo) {
 		this.conteudo = conteudo;
 	}
 

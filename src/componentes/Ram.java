@@ -24,7 +24,7 @@ public class Ram extends Thread {
 	}
 
 	public Ram() {
-		offset = Constantes.QTDE_ESP_INST * Constantes.QTDE_INST_BUFFER;
+		offset = Constantes.SIZE_e_s_buffer;
 		inicializarRam();
 	}
 
@@ -38,7 +38,7 @@ public class Ram extends Thread {
 
 	void inicializarRam() {
 		Computador.cpu.setCI(-1);
-		for (int i = 0; i < ram.length; i++) {
+		for (int i = 0; i < offset; i++) {
 			ram[i] = -1;
 		}
 	}
@@ -49,10 +49,10 @@ public class Ram extends Thread {
 			try {
 				Computador.tela.escreverNoConsole("RAM rodando");
 				Computador.tela.toNaRam(true);
-				sleep(1000);
+				sleep(500);
 
 				Computador.tela.toNaRam(false);
-				sleep(1000);
+				sleep(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -63,7 +63,7 @@ public class Ram extends Thread {
 	}
 
 	public boolean verificarDisponibilidade() {
-		if (ramVazia()) {// mudar ram inst vazia
+		if (ramVazia()) {
 			Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_ES, Constantes.id_SINAL_OK);
 			Endereco endereco = new Endereco(Constantes.id_END_MEM, 0);
 			Dado dado = new Dado(Constantes.id_DADO_VAZIO);
@@ -74,9 +74,9 @@ public class Ram extends Thread {
 	}
 
 	public boolean colocarInstrucaoNaRam(Endereco e, Dado d) {
-		if (ram[e.getEndereco()] == -1) {
+		if (ram[(int) e.getEndereco()] == -1) {
 			int cont = 0;
-			for (int i = e.getEndereco(); i < d.getConteudo().length; i++) {
+			for (int i = (int) e.getEndereco(); i < d.getConteudo().length; i++) {
 				ram[i] = d.getConteudo()[cont++];
 			}
 			Computador.cpu.setCI(0);
@@ -106,8 +106,49 @@ public class Ram extends Thread {
 		rodando = true;
 	}
 
-	public void mandarInstrucaoPraCpu(Endereco e, Dado d) {
-		// TODO Auto-generated method stub
-		
+	public boolean mandarInstrucaoPraCpu(Endereco e, Dado d) {
+		if (ram[(int) e.getEndereco()] != -1) {
+			byte[] dados = new byte[d.getQtde()];
+			int cont = 0;
+			for (int i = (int) e.getEndereco(); i < e.getEndereco() + d.getQtde(); i++) {
+				dados[cont++] = ram[i];
+				ram[i] = -1;
+			}
+
+			Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_CPU, Constantes.id_SINAL_ESC);
+			Dado dado = new Dado(Constantes.id_DADO_DADO, dados);
+			Endereco endereco = new Endereco(Constantes.id_END_VAZIO);
+			Computador.tela.escreverNoConsole("$$$$ RAM <- Barramento -> CPU");
+			Computador.barramento.Enfileirar(sinal, dado, endereco);
+
+			if (e.getEndereco() + d.getQtde() == offset) {
+				Computador.cpu.setCI(-1);
+			} else {
+				Computador.cpu.setCI((int) e.getEndereco() + d.getQtde());
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public long puxarValor(long endereco, int tam) {
+		byte[] aux = new byte[tam];
+		int cont = 0;
+		for (int i = (int) endereco + offset; i < endereco + offset + tam; i++) {
+			aux[cont++] = ram[i];
+		}
+		long compressed = aux[0];
+		for (int i = 1; i < aux.length; i++) {
+			compressed ^= (aux[i] << 8 * i);
+		}
+		return compressed;
+	}
+
+	public void colocarValor(long endereco, byte[] valores) {
+		int cont = 0;
+		System.out.println("TO NA RAM: ENDERECO: " + (endereco + offset) + " VALORES: " + Arrays.toString(valores));
+		for (int i = (int) endereco + offset - 1; i < endereco + offset + valores.length - 1; i++) {
+			ram[i] = valores[cont++];
+		}
 	}
 }

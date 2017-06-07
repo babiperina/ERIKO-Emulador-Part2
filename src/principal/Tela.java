@@ -57,7 +57,7 @@ public class Tela extends JFrame {
 	public Tela() {
 		setTitle("Desenvolvido por Bárbara Perina e Heitor Lopes.");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1050, 650);
+		setBounds(100, 100, 1050, 680);
 		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -103,6 +103,7 @@ public class Tela extends JFrame {
 		btnCpu.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnCpu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				areaComponente.setText(Computador.cpu.toString());
 			}
 		});
 		panel_1.add(btnCpu);
@@ -182,6 +183,43 @@ public class Tela extends JFrame {
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel.add(lblNewLabel_5);
 		panel.add(panelEs);
+
+		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(799, 611, 225, 23);
+		contentPane.add(panel_2);
+		panel_2.setLayout(new GridLayout(1, 3, 0, 0));
+
+		JLabel lblBarSinal = new JLabel("");
+		lblBarSinal.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblBarSinal);
+
+		JLabel lblBarDado = new JLabel("");
+		lblBarDado.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblBarDado);
+
+		JLabel lblBarEnd = new JLabel("");
+		lblBarEnd.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblBarEnd);
+
+		JButton btnBarramento = new JButton("Barramento");
+		btnBarramento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblBarSinal.setText("S: " + Computador.barramento.qtdeSinal());
+				lblBarDado.setText("D: " + Computador.barramento.qtdeDado());
+				lblBarEnd.setText("E: " + Computador.barramento.qtdeEndereco());
+			}
+		});
+		btnBarramento.setBounds(676, 611, 115, 23);
+		contentPane.add(btnBarramento);
+		
+		JButton btnNewButton = new JButton("");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(Computador.barramento.toString());
+			}
+		});
+		btnNewButton.setBounds(637, 611, 33, 23);
+		contentPane.add(btnNewButton);
 
 	}
 

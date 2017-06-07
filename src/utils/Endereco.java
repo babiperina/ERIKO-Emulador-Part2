@@ -2,17 +2,17 @@ package utils;
 
 public class Endereco {
 	private int tipo;
-	private int endereco;
+	private long endereco;
 
 	public Endereco(int tipo) {
 		super();
 		this.setTipo(tipo);
 	}
 
-	public Endereco(int tipo, int endereco) {
+	public Endereco(int tipo, long l) {
 		super();
 		this.setTipo(tipo);
-		this.setEndereco(endereco);
+		this.setEndereco(l);
 	}
 
 	public int getTipo() {
@@ -23,11 +23,11 @@ public class Endereco {
 		this.tipo = tipo;
 	}
 
-	public int getEndereco() {
+	public long getEndereco() {
 		return endereco;
 	}
 
-	public void setEndereco(int endereco) {
+	public void setEndereco(long endereco) {
 		this.endereco = endereco;
 	}
 

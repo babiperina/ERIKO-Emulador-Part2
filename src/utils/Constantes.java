@@ -3,7 +3,7 @@ package utils;
 public class Constantes {
 
 	public static final String ARQUIVO_DE_TEXTO = "assembly";
-	
+
 	public static int id_ES = 37;
 	public static int id_CPU = 278;
 	public static int id_RAM = 726;
@@ -20,17 +20,16 @@ public class Constantes {
 	public static int id_END_MEM = 6;
 	public static int id_END_VAZIO = -1;
 
-	public static int SIZE_word = 16; // em bits
-	public static int SIZE_ram = 16; //em kb
-//	public static int SIZE_ram = 32; //em kb
-//	public static int SIZE_ram = 64; //em kb
-//	public static int SIZE_ram = 128; //em kb
+	public static int SIZE_word = 32; // em bits
+	public static int SIZE_ram = 16; // em kb
+	// public static int SIZE_ram = 32; //em kb
+	// public static int SIZE_ram = 64; //em kb
+	// public static int SIZE_ram = 128; //em kb
 	public static int SIZE_e_s_buffer;
 	public static int TAM_MAX_INST;
 	public static int QTDE_ESP_INST;
-	public static int QTDE_INST_BUFFER = 2;
-	
-	
+	public static int QTDE_INST_BUFFER = 4;
+
 	private static void setSizeBuffer() {
 		QTDE_ESP_INST = TAM_MAX_INST;
 		SIZE_e_s_buffer = QTDE_ESP_INST * QTDE_INST_BUFFER;
@@ -135,24 +134,7 @@ public class Constantes {
 		RE_inc = "^(inc)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*$";
 		RE_imul = "^(imul)\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + ")\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]"
 				+ limitMemoryDigits + "|\\d+)\\s*," + "\\s+([a-dA-D]|0x[a-fA-F0-9]" + limitMemoryDigits + "|\\d+)\\s*$";
-//		System.out.println(RE_add_mov + "\n" + RE_inc + "\n" + RE_imul);
-//		System.out.println("LB: " + WIDTH_barramento + " TP: " + SIZE_word + " TAM_MAX_INST: " + TAM_MAX_INST + " QTDE_ESP_INST: " + QTDE_ESP_INST);
-//		switch (SIZE_word) {
-//		case 16:
-//			System.out.println("$$$$ Palavra deverá ser SHORT.");
-//			break;
-//		case 32:
-//			System.out.println("$$$$ Palavra deverá ser INT.");
-//			break;
-//		case 64:
-//			System.out.println("$$$$ Palavra deverá ser LONG.");
-//			break;
-//
-//		default:
-//			System.err.println("Erro no tamanho da palavra.");
-//			System.exit(0);
-//			break;
-//		}
+
 	}
 
 }

@@ -27,12 +27,12 @@ public class Barramento extends Thread {
 		return false;
 	}
 
-	private boolean enviar() {
+	private boolean enviar(int i) {
 		boolean remover = false;
-		if (!dados.isEmpty()) {
-			Sinal s = sinais.get(0);
-			Endereco e = enderecos.get(0);
-			Dado d = dados.get(0);
+		if (!dados.isEmpty() && i < dados.size()) {
+			Sinal s = sinais.get(i);
+			Endereco e = enderecos.get(i);
+			Dado d = dados.get(i);
 
 			if (s.getDestinatario() == Constantes.id_RAM) {
 				if (s.getRemetente() == Constantes.id_ES) {
@@ -44,23 +44,31 @@ public class Barramento extends Thread {
 					}
 				} else if (s.getRemetente() == Constantes.id_CPU) {
 					if (s.getTipo() == Constantes.id_SINAL_LER) {
-						Computador.ram.mandarInstrucaoPraCpu(e, d);
+						remover = Computador.ram.mandarInstrucaoPraCpu(e, d);
 					}
 				}
 			} else if (s.getDestinatario() == Constantes.id_ES) {
 				if (s.getRemetente() == Constantes.id_RAM && s.getTipo() == Constantes.id_SINAL_OK) {
 					remover = Computador.es.mandarInstrucaoPraRam(e);
 				}
+			} else if (s.getDestinatario() == Constantes.id_CPU) {
+				if (s.getRemetente() == Constantes.id_RAM && s.getTipo() == Constantes.id_SINAL_ESC) {
+					remover = Computador.cpu.decodificar(d.getConteudo());
+				}
+			}
+
+			if (remover) {
+				System.out.println("Antes: " + toString());
+				sinais.remove(i);
+				dados.remove(i);
+				enderecos.remove(i);
+				System.out.println("Depois: " + toString());
+				return true;
+			} else {
+				return enviar(++i);
 			}
 		}
-		if (remover) {
-			sinais.remove(0);
-			dados.remove(0);
-			enderecos.remove(0);
-			return true;
-		} else
-			return false;
-
+		return false;
 	}
 
 	@Override
@@ -69,10 +77,10 @@ public class Barramento extends Thread {
 		while (rodando) {
 			try {
 				Computador.tela.toNoBarramento(true);
-				sleep(1000);
-				Computador.tela.escreverNoConsole(enviar() + "");
+				sleep(500);
+				enviar(0);
 				Computador.tela.toNoBarramento(false);
-				sleep(1000);
+				sleep(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -83,4 +91,22 @@ public class Barramento extends Thread {
 	public void parar() {
 		rodando = false;
 	}
+
+	public int qtdeDado() {
+		return dados.size();
+	}
+
+	public int qtdeEndereco() {
+		return enderecos.size();
+	}
+
+	public int qtdeSinal() {
+		return sinais.size();
+	}
+
+	@Override
+	public String toString() {
+		return "Barramento [\n\tdados=" + dados + ", \n\tenderecos=" + enderecos + ", \n\tsinais=" + sinais + "]";
+	}
+
 }

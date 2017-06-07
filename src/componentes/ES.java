@@ -37,10 +37,10 @@ public class ES extends Thread {
 		while (rodando) {
 			try {
 				Computador.tela.toNaES(true);
-				sleep(1000);
+				sleep(500);
 				puxarInstrucaoDoEncoder();
 				Computador.tela.toNaES(false);
-				sleep(1000);
+				sleep(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -84,11 +84,17 @@ public class ES extends Thread {
 					bufferCIE = tamanhoInstrucoes;
 				}
 				Computador.tela.escreverNoConsole("$$$$ Instrução colocada no Buffer.(ES.java:86)");
-			} else if (bufferCIE == buffer.length) {
+			} else if (bufferCIE == buffer.length || Computador.encoder.todasInstrucoesNaES()) {
 				Computador.tela.escreverNoConsole(toString());
 				Sinal sinal = new Sinal(Constantes.id_ES, Constantes.id_RAM, Constantes.id_SINAL_ESC);
-				Dado dado = new Dado(Constantes.id_DADO_QTDE, buffer.length);
+				Dado dado;
 				Endereco endereco = new Endereco(Constantes.id_END_VAZIO);
+				if (Computador.encoder.todasInstrucoesNaES()) {
+					dado = new Dado(Constantes.id_DADO_QTDE, buffer.length); // mudar
+																				// aqui
+				} else {
+					dado = new Dado(Constantes.id_DADO_QTDE, buffer.length);
+				}
 				Computador.barramento.Enfileirar(sinal, dado, endereco);
 				prontoPraIrPraRAM = true;
 				Computador.tela.escreverNoConsole("$$$$ Instrução preparada para ir pra Ram. (ES.java:94)");
@@ -131,6 +137,7 @@ public class ES extends Thread {
 				}
 				Computador.tela.escreverNoConsole("$$$$ Instrução colocada no Buffer. (ES.java:135)");
 			}
+//			Computador.tela.escreverNoConsole(toString());
 		}
 
 	}
@@ -165,7 +172,7 @@ public class ES extends Thread {
 
 	@Override
 	public String toString() {
-		return "Módulo Entrada e Saída\n  buffer= " + Arrays.toString(buffer);
+		return "Módulo Entrada e Saída\n  buffer= size: " + buffer.length + " " + Arrays.toString(buffer);
 	}
 
 	public boolean mandarInstrucaoPraRam(Endereco e) {

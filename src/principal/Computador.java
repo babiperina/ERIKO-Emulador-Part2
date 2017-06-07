@@ -17,7 +17,7 @@ public class Computador extends Thread {
 	public static ES es = new ES();
 	public static Tela tela = new Tela();
 
-	public void parar() {
+	public static void parar() {
 		barramento.parar();
 		es.parar();
 		cpu.parar();
@@ -25,7 +25,7 @@ public class Computador extends Thread {
 		encoder.mostrarInstrucoesCodificadas();
 	}
 	
-	public void init() {
+	public static void init() {
 		parser.run();
 		encoder.run();
 		barramento.start();

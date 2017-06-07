@@ -62,7 +62,7 @@ public class Encoder {
 			Computador.tela.escreverNoConsole(texto);
 
 			codificada = new InstrucaoCodificada(
-					transformarDeLongProCodigoFinal(code, Constantes.SIZE_word, Constantes.WIDTH_barramento));
+					transformarDeLongProCodigoFinal(code, Constantes.SIZE_word, Constantes.WIDTH_barramento), code);
 			instrucoesCodificadas.add(codificada);
 
 			instrucoes.remove(0);
@@ -618,7 +618,8 @@ public class Encoder {
 	public String toString() {
 		String texto = "";
 		for (int i = 0; i < instrucoesCodificadas.size(); i++) {
-			texto += " " + Arrays.toString(instrucoesCodificadas.get(i).getInstrucaoCodificada())+" isEs -> " + instrucoesCodificadas.get(i).isES() + "\n";
+			texto += " " + Arrays.toString(instrucoesCodificadas.get(i).getInstrucaoCodificada())+" isEs -> "
+					+ instrucoesCodificadas.get(i).isES() + "\n";
 		}
 		return "Encoder \nInstruções Codificadas= \n" + texto;
 	}
