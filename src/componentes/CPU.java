@@ -5,7 +5,7 @@ import utils.Constantes;
 
 public class CPU extends Thread {
 	
-	private Barramento barramento;
+
 	private Registrador A = new Registrador(Constantes.VALUE_register_A, "A", null);
 	private Registrador B = new Registrador(Constantes.VALUE_register_B, "B", null);
 	private Registrador C = new Registrador(Constantes.VALUE_register_C, "C", null);
@@ -18,15 +18,17 @@ public class CPU extends Thread {
 	
 	
 	public CPU() {
-		setBarramento(Computador.barramento);
 	}
 	
 	@Override
 	public void run() {
 		while(rodando){
-			System.out.println("CPU Rodando");
 			try {
-				sleep(2000);
+				Computador.tela.escreverNoConsole("CPU Rodando");
+				Computador.tela.toNaCpu(true);
+				sleep(1000);
+				Computador.tela.toNaCpu(false);
+				sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -47,14 +49,6 @@ public class CPU extends Thread {
 		
 	}
 	
-	public Barramento getBarramento() {
-		return barramento;
-	}
-
-	public void setBarramento(Barramento barramento) {
-		this.barramento = barramento;
-	}
-
 	public Registrador getA() {
 		return A;
 	}
@@ -99,5 +93,8 @@ public class CPU extends Thread {
 		rodando = false;
 		
 	}
-	
+
+	public void retornar() {
+		rodando = true;
+	}
 }

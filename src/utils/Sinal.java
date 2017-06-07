@@ -37,4 +37,11 @@ public class Sinal {
 		this.tipo = tipo;
 	}
 
+	@Override
+	public String toString() {
+		return "Sinal [tipo=" + tipo + ", remetente=" + remetente + ", destinatario=" + destinatario + "]";
+	}
+	
+	
+
 }

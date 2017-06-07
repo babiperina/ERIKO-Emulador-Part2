@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.Arrays;
+
 public class Dado {
 
 	private int qtde;
@@ -46,5 +48,12 @@ public class Dado {
 	public void setTipo(int tipo) {
 		this.tipo = tipo;
 	}
+
+	@Override
+	public String toString() {
+		return "Dado [qtde=" + qtde + ", tipo=" + tipo + ", conteudo=" + Arrays.toString(conteudo) + "]";
+	}
+	
+	
 
 }

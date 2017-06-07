@@ -1,5 +1,6 @@
 package componentes;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import principal.Computador;
@@ -10,7 +11,6 @@ import utils.Sinal;
 
 public class Ram extends Thread {
 
-	Barramento barramento;
 	private byte[] ram = new byte[Constantes.SIZE_ram * 1000];
 	private int offset;
 	private boolean rodando = true;
@@ -24,8 +24,8 @@ public class Ram extends Thread {
 	}
 
 	public Ram() {
-		barramento = Computador.barramento;
 		offset = Constantes.QTDE_ESP_INST * Constantes.QTDE_INST_BUFFER;
+		inicializarRam();
 	}
 
 	public int getOffset() {
@@ -36,67 +36,68 @@ public class Ram extends Thread {
 		this.offset = offset;
 	}
 
+	void inicializarRam() {
+		for (int i = 0; i < ram.length; i++) {
+			ram[i] = -1;
+		}
+	}
+
 	@Override
 	public void run() {
 		while (rodando) {
-			System.out.println("RAM rodando");
 			try {
-				sleep(2000);
+				Computador.tela.escreverNoConsole("RAM rodando");
+				Computador.tela.toNaRam(true);
+				sleep(1000);
+				Random gerador = new Random();
+
+				int numero = gerador.nextInt(10);
+				if (numero % 2 == 0) {
+					inicializarRam();
+				}
+				Computador.tela.toNaRam(false);
+				sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+
 			}
 		}
 		super.run();
 	}
 
-	public void enviarRespostaES() {
-		// Random gerador = new Random();
-		//
-		// int numero = gerador.nextInt(10);
-		// if (numero % 2 == 0) {
-		// Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_ES,
-		// Constantes.id_SINAL_OK);
-		// Dado dado = new Dado(Constantes.id_RAM, Constantes.id_ES,
-		// Constantes.id_DADO_VAZIO);
-		// Endereco endereco = new Endereco(Constantes.id_RAM, Constantes.id_ES,
-		// Constantes.id_END_MEM, 1);
-		// barramento.Enfileirar(sinal, dado, endereco);
-		// } else {
-		// Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_ES,
-		// Constantes.id_SINAL_ERROR);
-		// Dado dado = new Dado(Constantes.id_RAM, Constantes.id_ES,
-		// Constantes.id_DADO_VAZIO);
-		// Endereco endereco = new Endereco(Constantes.id_RAM, Constantes.id_ES,
-		// Constantes.id_END_VAZIO);
-		// barramento.Enfileirar(sinal, dado, endereco);
-		//
-		// }
-	}
-
 	public boolean verificarDisponibilidade() {
-		Random gerador = new Random();
-
-		int numero = gerador.nextInt(10);
-
-		if (numero % 2 == 0) {
+		if (ram[0] == -1) {
 			Sinal sinal = new Sinal(Constantes.id_RAM, Constantes.id_ES, Constantes.id_SINAL_OK);
 			Endereco endereco = new Endereco(Constantes.id_END_MEM, 0);
 			Dado dado = new Dado(Constantes.id_DADO_VAZIO);
-			barramento.Enfileirar(sinal, dado, endereco);
+			Computador.barramento.Enfileirar(sinal, dado, endereco);
 			return true;
 		}
 		return false;
 	}
 
-	public void colocarInstrucaoNaRam(Endereco e, Dado d) {
-		int cont = 0;
-		for (int i = e.getEndereco(); i < offset; i++) {
-			ram[i] = d.getConteudo()[cont++];
+	public boolean colocarInstrucaoNaRam(Endereco e, Dado d) {
+		if (ram[e.getEndereco()] == -1) {
+			int cont = 0;
+			for (int i = e.getEndereco(); i < d.getConteudo().length; i++) {
+				ram[i] = d.getConteudo()[cont++];
+			}
+			return true;
 		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "Ram [ram=" + Arrays.toString(ram) + "]";
 	}
 
 	public void parar() {
 		rodando = false;
+	}
+
+	public void retornar() {
+		rodando = true;
 	}
 }

@@ -616,8 +616,11 @@ public class Encoder {
 
 	@Override
 	public String toString() {
-		return "Encoder \n  codes= " + Arrays.toString(codes) + ";\n  instrucoes= " + instrucoes
-				+ ";\n  instrucoesCodificadas= " + instrucoesCodificadas;
+		String texto = "";
+		for (int i = 0; i < instrucoesCodificadas.size(); i++) {
+			texto += " " + Arrays.toString(instrucoesCodificadas.get(i).getInstrucaoCodificada())+" isEs -> " + instrucoesCodificadas.get(i).isES() + "\n";
+		}
+		return "Encoder \nInstruções Codificadas= \n" + texto;
 	}
 
 }

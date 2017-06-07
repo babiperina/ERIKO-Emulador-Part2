@@ -30,4 +30,10 @@ public class Endereco {
 	public void setEndereco(int endereco) {
 		this.endereco = endereco;
 	}
+
+	@Override
+	public String toString() {
+		return "Endereco [tipo=" + tipo + ", endereco=" + endereco + "]";
+	}
+	
 }

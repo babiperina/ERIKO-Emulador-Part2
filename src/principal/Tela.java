@@ -12,13 +12,26 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JCheckBox;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.SwingConstants;
 
 public class Tela extends JFrame {
 
 	private JPanel contentPane;
-	JTextArea console = new JTextArea();
+	static JTextArea console = new JTextArea();
+	static JButton btnCpu = new JButton("CPU");
 	public static Computador computador = new Computador();
+	JCheckBox chckbxAutoscroll = new JCheckBox("AutoScroll");
+	JButton btnRam = new JButton("RAM");
+	JPanel panelBar = new JPanel();
+	JPanel panelCpu = new JPanel();
+	JPanel panelRam = new JPanel();
+	JPanel panelEs = new JPanel();
 
 	/**
 	 * Launch the application.
@@ -41,8 +54,10 @@ public class Tela extends JFrame {
 	 * Create the frame.
 	 */
 	public Tela() {
+		setTitle("Desenvolvido por Bárbara Perina e Heitor Lopes.");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 850, 650);
+		setBounds(100, 100, 1050, 650);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -54,26 +69,34 @@ public class Tela extends JFrame {
 
 		JTextArea areaComponente = new JTextArea();
 		areaComponente.setEditable(false);
-		areaComponente.setBounds(599, 130, 225, 470);
+		areaComponente.setBounds(799, 130, 225, 339);
 		areaComponente.setLineWrap(true);
 		areaComponente.setWrapStyleWord(true);
 		contentPane.add(areaComponente);
 
+		JButton btnParar = new JButton("Parar");
+		btnParar.setEnabled(false);
 		JButton btnIniciar = new JButton("Iniciar");
 		btnIniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				computador.init();
+				btnIniciar.setEnabled(false);
+				btnParar.setEnabled(true);
 			}
 		});
-		btnIniciar.setBounds(275, 11, 89, 23);
+		btnIniciar.setBounds(518, 11, 89, 23);
 		contentPane.add(btnIniciar);
 
+		JScrollPane scrollPane = new JScrollPane(console);
+		scrollPane.setBounds(10, 36, 779, 564);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		contentPane.add(scrollPane);
+
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(599, 11, 225, 119);
+		panel_1.setBounds(799, 11, 225, 119);
 		contentPane.add(panel_1);
 		panel_1.setLayout(new GridLayout(2, 3, 0, 0));
 
-		JButton btnCpu = new JButton("CPU");
 		btnCpu.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnCpu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -82,6 +105,11 @@ public class Tela extends JFrame {
 		panel_1.add(btnCpu);
 
 		JButton btnRam = new JButton("RAM");
+		btnRam.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				areaComponente.setText(Computador.ram.toString());
+			}
+		});
 		btnRam.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel_1.add(btnRam);
 
@@ -104,29 +132,96 @@ public class Tela extends JFrame {
 		panel_1.add(btnEncoder);
 
 		console.setEditable(false);
-		console.setForeground(new Color(34, 139, 34));
+		console.setForeground(new Color(50, 205, 50));
 		console.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		console.setBackground(Color.BLACK);
-		console.setBounds(10, 36, 579, 564);
+		console.setBounds(10, 36, 554, 564);
 		console.setLineWrap(true);
 		console.setWrapStyleWord(true);
-		contentPane.add(console);
 
-		JButton btnParar = new JButton("Parar");
 		btnParar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				computador.parar();
+				btnIniciar.setEnabled(false);
+				btnParar.setEnabled(false);
 			}
 		});
-		btnParar.setBounds(368, 11, 89, 23);
+		btnParar.setBounds(607, 11, 89, 23);
 		contentPane.add(btnParar);
+		chckbxAutoscroll.setSelected(true);
+
+		chckbxAutoscroll.setBounds(702, 11, 89, 23);
+		contentPane.add(chckbxAutoscroll);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(799, 480, 225, 120);
+		contentPane.add(panel);
+		panel.setLayout(new GridLayout(4, 2, 0, 0));
+
+		JLabel lblNewLabel_1 = new JLabel("Barramento");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(lblNewLabel_1);
+
+		panel.add(panelBar);
+
+		JLabel lblNewLabel_2 = new JLabel("Cpu");
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(lblNewLabel_2);
+		panel.add(panelCpu);
+
+		JLabel lblNewLabel_4 = new JLabel("Ram");
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(lblNewLabel_4);
+		panel.add(panelRam);
+
+		JLabel lblNewLabel_5 = new JLabel("M\u00F3dulo ES");
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(lblNewLabel_5);
+		panel.add(panelEs);
 
 	}
 
 	public void escreverNoConsole(String texto) {
-		if (console.getText() == "")
-			console.setText(texto);
-		else
-			console.setText(console.getText() + "\n" + texto);
+		console.setText(console.getText() + "\n" + texto);
+		scrollAcompanhar(chckbxAutoscroll.isSelected());
+	}
+
+	public void scrollAcompanhar(boolean acompanha) {
+		if (acompanha)
+			console.setCaretPosition(console.getText().length());
+
+	}
+
+	
+	public void toNaES(boolean to) {
+		if (to) {
+			panelEs.setBackground(new Color(102, 153, 255));
+		} else {
+			panelEs.setBackground(new Color(240, 240, 240));
+		}
+	}
+	
+	public void toNoBarramento(boolean to) {
+		if (to) {
+			panelBar.setBackground(new Color(153, 255, 153));
+		} else {
+			panelBar.setBackground(new Color(240, 240, 240));
+		}
+	}
+
+	public void toNaCpu(boolean to) {
+		if (to) {
+			panelCpu.setBackground(new Color(0, 51, 153));
+		} else {
+			panelCpu.setBackground(new Color(240, 240, 240));
+		}
+	}
+
+	public void toNaRam(boolean to) {
+		if (to) {
+			panelRam.setBackground(new Color(153, 51, 51));
+		} else {
+			panelRam.setBackground(new Color(240, 240, 240));
+		}
 	}
 }

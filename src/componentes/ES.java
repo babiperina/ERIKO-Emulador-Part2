@@ -13,14 +13,12 @@ public class ES extends Thread {
 
 	private int bufferCIE = -1;
 	byte[] buffer = new byte[Constantes.SIZE_e_s_buffer];
-	Barramento barramento;
 	Encoder encoder;
 	boolean rodando = true;
 	boolean prontoPraIrPraRAM = false;
 	private int tamanhoInstrucoes;
 
 	public ES() {
-		barramento = Computador.barramento;
 		encoder = Computador.encoder;
 		inicializarBuffer();
 		tamanhoInstrucoes = Constantes.QTDE_ESP_INST;
@@ -38,22 +36,23 @@ public class ES extends Thread {
 	public void run() {
 		while (rodando) {
 			try {
-				sleep(2000);
+				Computador.tela.toNaES(true);
+				sleep(1000);
+				puxarInstrucaoDoEncoder();
+				Computador.tela.toNaES(false);
+				sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// System.out.println("CI Escrita: " + bufferCIE); // teste
-			// System.out.println("Tamanho buffer: " + buffer.length); // teste
-			puxarInstrucaoDoEncoder();
-			// System.out.println(toString()); // buffer print teste
 		}
 		super.run();
 	}
 
 	void puxarInstrucaoDoEncoder() {
-		System.out.println(
-				!prontoPraIrPraRAM + "  " + bufferCIE + "  " + buffer.length + "  " + (bufferCIE == buffer.length));
+		Computador.tela.escreverNoConsole("$$$$ Instrução pronta pra ir pra RAM: " + prontoPraIrPraRAM
+				+ "(ES.java:55)\n$$$$ CI de escrita do Buffer, posição: " + bufferCIE
+				+ "(ES.java:56)\n$$$$ Tamanho do Buffer: " + buffer.length + " (ES.java:57)");
 		if (!prontoPraIrPraRAM) {
 			if (bufferCIE == -1) {
 				InstrucaoCodificada instructionIn = encoder.mandarInstrucoesParaModuloES();
@@ -84,15 +83,16 @@ public class ES extends Thread {
 					}
 					bufferCIE = tamanhoInstrucoes;
 				}
+				Computador.tela.escreverNoConsole("$$$$ Instrução colocada no Buffer.(ES.java:88)");
 			} else if (bufferCIE == buffer.length) {
-				System.out.println("ES Buffer tá cheio de instrução.");
-				System.out.println(toString());
+				Computador.tela.escreverNoConsole(toString());
 				int qtdeDados = Constantes.QTDE_INST_BUFFER * (Constantes.TAM_MAX_INST * 2);
 				Sinal sinal = new Sinal(Constantes.id_ES, Constantes.id_RAM, Constantes.id_SINAL_ESC);
 				Dado dado = new Dado(Constantes.id_DADO_QTDE, qtdeDados);
 				Endereco endereco = new Endereco(Constantes.id_END_VAZIO);
-				System.out.println(barramento.Enfileirar(sinal, dado, endereco));
+				System.out.println(Computador.barramento.Enfileirar(sinal, dado, endereco));
 				prontoPraIrPraRAM = true;
+				Computador.tela.escreverNoConsole("$$$$ Instrução preparada para ir pra Ram. (ES.java:97)");
 			} else {
 				if (buffer[bufferCIE] == -1) {
 					InstrucaoCodificada instructionIn = encoder.mandarInstrucoesParaModuloES();
@@ -130,45 +130,9 @@ public class ES extends Thread {
 							bufferCIE += tamanhoInstrucoes;
 					}
 				}
+				Computador.tela.escreverNoConsole("$$$$ Instrução colocada no Buffer. (ES.java:135)");
 			}
 		}
-	}
-
-	void mandarInstPraRam() {
-		// byte b[] = new byte[tamanhoInstrucoes];
-		// int contAux = 1;
-		// for (int i = 1; i <= Constantes.QTDE_INST_BUFFER; i++) {
-		// b = new byte[tamanhoInstrucoes];
-		// if (bufferCIE == buffer.length) {
-		// bufferCIE = 0;
-		// }
-		// int cont = 0;
-		// boolean tem = false;
-		// for (int j = bufferCIE; j < bufferCIE + tamanhoInstrucoes; j++) {
-		// if (j == bufferCIE) {
-		// if (buffer[j] != -1 && buffer[j + 1] != -1) {
-		// tem = true;
-		// }
-		// }
-		// b[cont++] = buffer[j];
-		// buffer[j] = -1;
-		// }
-		//
-		// if (b[0] != -1 || b[1] != -1) {
-		// // System.out.println("$$$$ Mandando dado " + contAux++ + " pro
-		// // Barramento.");
-		// // Sinal sinal = new Sinal(Constantes.id_ES, Constantes.id_RAM,
-		// // Constantes.id_SINAL_ESC);
-		// // Dado dado = new Dado(Constantes.id_ES, Constantes.id_RAM,
-		// // Constantes.id_DADO_DADO, b);
-		// // Endereco endereco = new Endereco(Constantes.id_ES,
-		// // Constantes.id_RAM, Constantes.id_END_MEM, 1);
-		// // barramento.Enfileirar(sinal, dado, endereco);
-		// }
-		//
-		// bufferCIE += tamanhoInstrucoes;
-		// }
-		// bufferCIE = 0;
 
 	}
 
@@ -209,19 +173,22 @@ public class ES extends Thread {
 			Sinal sinal = new Sinal(Constantes.id_ES, Constantes.id_RAM, Constantes.id_SINAL_ESC);
 			Endereco endereco = e;
 			Dado dado = new Dado(Constantes.id_DADO_DADO, buffer);
-			prontoPraIrPraRAM = false;
 			Computador.barramento.Enfileirar(sinal, dado, endereco);
 			bufferCIE = -1;
 			inicializarBuffer();
+			prontoPraIrPraRAM = false;
 			return true;
 		} else {
 			return false;
 		}
 
 	}
-	
-	public void parar(){
+
+	public void parar() {
 		rodando = false;
 	}
 
+	public void retornar() {
+		rodando = true;
+	}
 }

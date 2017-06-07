@@ -16,28 +16,15 @@ public class Computador extends Thread {
 	public static Ram ram = new Ram();
 	public static ES es = new ES();
 	public static Tela tela = new Tela();
-	private boolean rodando = false;
-	
-	public void run() {
-		while (rodando) {
-			if (encoder.todasInstrucoesNaES() && es.bufferVazio() && barramento.dados.isEmpty()) {
-				parar();
-			}
-			encoder.mostrarInstrucoesCodificadas(); // teste
-		}
-	}
 
 	public void parar() {
 		barramento.parar();
 		es.parar();
 		cpu.parar();
 		ram.parar();
+		encoder.mostrarInstrucoesCodificadas();
 	}
-
-	public void iniciar() {
-		rodando = true;
-	}
-
+	
 	public void init() {
 		parser.run();
 		encoder.run();
@@ -45,6 +32,5 @@ public class Computador extends Thread {
 		es.start();
 		cpu.start();
 		ram.start();
-		iniciar();
 	}
 }
